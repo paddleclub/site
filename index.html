@@ -1377,7 +1377,7 @@
     .ig-card__thumb {
       position: relative;
       width: 100%;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 16 / 9;
       background: var(--color-bg);
       overflow: hidden;
     }
@@ -1386,7 +1386,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: 50% 8%;
+      object-position: 50% 12%;
       display: block;
       transition: transform 0.3s ease;
     }
@@ -1576,6 +1576,146 @@
 
     /* FOUNDER STRIP END ========================================= */
 
+    /* ============================================================
+       IG + DONATION HUB GRID — side by side on desktop
+       ============================================================ */
+    .ig-hub-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-md);
+      align-items: start;
+    }
+
+    /* Right-column wrapper — stacks donation hub + partner card */
+    .ig-hub-right {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .ig-hub-right .donation-hub-cta {
+      margin-top: 0;
+    }
+
+    /* Partner spotlight card */
+    .partner-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .partner-card__logo {
+      width: 96px;
+      height: 96px;
+      flex-shrink: 0;
+      background: #000;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .partner-card__logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      transform: scale(1.18);
+    }
+
+    .partner-card__content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .partner-card__label {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    .partner-card__name {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--color-accent-dark);
+      line-height: 1.3;
+    }
+
+    .partner-card__bio {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      line-height: 1.65;
+    }
+
+    .partner-card__link {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--color-accent);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      margin-top: 2px;
+    }
+
+    .partner-card__link:hover { color: var(--color-accent-dark); }
+
+    @media (min-width: 768px) {
+      .ig-hub-grid {
+        grid-template-columns: 1fr 1fr;
+        align-items: stretch;
+      }
+
+      /* Right column fills full grid height; partner card expands to fill remainder */
+      .ig-hub-right {
+        height: 100%;
+      }
+
+      .ig-hub-right .partner-card {
+        flex: 0 0 auto;
+      }
+
+      .ig-hub-grid .donation-hub-cta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .ig-hub-grid .donation-hub-cta .btn--primary {
+        width: 100%;
+        justify-content: center;
+      }
+
+      /* IG card: full height, button pinned to bottom */
+      .ig-hub-grid .ig-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .ig-hub-grid .ig-card__body {
+        flex-direction: column;
+        flex: 1;
+      }
+
+      .ig-hub-grid .ig-card__body .btn {
+        width: 100%;
+        justify-content: center;
+        margin-top: auto;
+      }
+    }
+
   </style>
 </head>
 
@@ -1689,10 +1829,10 @@
         </div>
 
         <!--
-          INSTAGRAM FEATURE CARD
-          To update: set src on .ig-card__thumb img, update data-href on .ig-card,
-          edit the handle and caption text below.
+          INSTAGRAM FEATURE CARD + DONATION HUB — side by side on desktop
         -->
+        <div class="ig-hub-grid">
+
         <a
           class="ig-card"
           href="https://www.instagram.com/reel/DTbRUwYEtXK/?igsh=Mzc3ZTVlOWMwZA=="
@@ -1725,19 +1865,12 @@
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
               </svg>
-              Instagram
+              Troy Hamner
             </div>
           </div>
 
           <div class="ig-card__body">
             <div class="ig-card__meta">
-              <!--
-                SWAP: Replace with your Instagram handle, e.g. @paddleclub.org
-              -->
-              <p class="ig-card__handle">@troyhamner</p>
-              <!--
-                SWAP: Replace with your post caption or a short description.
-              -->
               <p class="ig-card__caption">
                 After the LA fires, I set out to get every LA firefighter a paddle in thanks, then I found out there's almost 9,000... So I need your extras.
               </p>
@@ -1746,21 +1879,44 @@
           </div>
         </a>
 
-        <!-- Donation hub CTA -->
-        <div class="donation-hub-cta" role="complementary" aria-label="Register your club as a donation hub">
-          <div class="donation-hub-cta__body">
-            <div class="donation-hub-cta__icon" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
-              </svg>
+        <!-- Right column: donation hub + partner card -->
+        <div class="ig-hub-right">
+
+          <!-- Donation hub CTA -->
+          <div class="donation-hub-cta" role="complementary" aria-label="Register your club as a donation hub">
+            <div class="donation-hub-cta__body">
+              <div class="donation-hub-cta__icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+                </svg>
+              </div>
+              <div class="donation-hub-cta__text">
+                <p class="donation-hub-cta__headline">Become a donation hub</p>
+                <p class="donation-hub-cta__desc">Collect paddle donations from your community — we'll pick them up and deliver them to firefighters across LA.</p>
+              </div>
             </div>
-            <div class="donation-hub-cta__text">
-              <p class="donation-hub-cta__headline">Become a donation hub</p>
-              <p class="donation-hub-cta__desc">Collect paddle donations from your community — we'll pick them up and deliver them to firefighters across LA.</p>
+            <a href="mailto:troy@paddleclub.org?subject=Donation%20Hub%20Inquiry&body=Hi%20Troy%2C%0A%0AI%27d%20like%20to%20register%20my%20club%20as%20a%20donation%20hub%20for%20the%20Paddles%204%20Firefighters%20drive.%0A%0AClub%2FFacility%20Name%3A%20%0ALocation%3A%20%0AContact%20Name%3A%20%0A" class="btn btn--primary">Become a Hub →</a>
+          </div>
+
+          <!-- Partner spotlight: County Fire Pickleball -->
+          <!--
+            LOGO: Save the CFPB logo as "cfpb-logo.png" in the PaddleClub folder
+            to activate the image below.
+          -->
+          <div class="partner-card" aria-label="Distribution partner: County Fire Pickleball">
+            <div class="partner-card__logo">
+              <img src="cfpb-logo.png" alt="County Fire Pickleball logo" />
+            </div>
+            <div class="partner-card__content">
+              <p class="partner-card__label">Distribution Partner</p>
+              <p class="partner-card__name">County Fire Pickleball</p>
+              <a href="https://www.countyfirepickleball.com" class="partner-card__link" target="_blank" rel="noopener noreferrer">countyfirepickleball.com ↗</a>
             </div>
           </div>
-          <a href="mailto:troy@paddleclub.org?subject=Donation%20Hub%20Inquiry&body=Hi%20Troy%2C%0A%0AI%27d%20like%20to%20register%20my%20club%20as%20a%20donation%20hub%20for%20the%20Paddles%204%20Firefighters%20drive.%0A%0AClub%2FFacility%20Name%3A%20%0ALocation%3A%20%0AContact%20Name%3A%20%0A" class="btn btn--primary">Become a Hub →</a>
-        </div>
+
+        </div><!-- /.ig-hub-right -->
+
+        </div><!-- /.ig-hub-grid -->
 
       </div>
 
@@ -1882,8 +2038,14 @@
   <section class="partner-bar" aria-label="Partners and coverage">
     <div class="partner-bar__track">
 
-      <!-- SET 1 — original -->
+      <!-- SET 1 — original (logos repeated to fill wide screens) -->
       <div class="partner-bar__set">
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="dupr.png" alt="DUPR" style="height:20px;" /></span>
+        <span class="partner-bar__dot" aria-hidden="true"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="piklla.png" alt="Piklla" style="height:32px;" /></span>
+        <span class="partner-bar__dot" aria-hidden="true"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="Get2eleventhin.webp" alt="Get2Eleven" style="height:38px;" /></span>
+        <span class="partner-bar__dot" aria-hidden="true"></span>
         <span class="partner-bar__item"><img class="partner-bar__logo" src="dupr.png" alt="DUPR" style="height:20px;" /></span>
         <span class="partner-bar__dot" aria-hidden="true"></span>
         <span class="partner-bar__item"><img class="partner-bar__logo" src="piklla.png" alt="Piklla" style="height:32px;" /></span>
@@ -1894,6 +2056,12 @@
 
       <!-- SET 2 — exact clone for seamless loop -->
       <div class="partner-bar__set" aria-hidden="true">
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="dupr.png" alt="DUPR" style="height:20px;" /></span>
+        <span class="partner-bar__dot"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="piklla.png" alt="Piklla" style="height:32px;" /></span>
+        <span class="partner-bar__dot"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="Get2eleventhin.webp" alt="Get2Eleven" style="height:38px;" /></span>
+        <span class="partner-bar__dot"></span>
         <span class="partner-bar__item"><img class="partner-bar__logo" src="dupr.png" alt="DUPR" style="height:20px;" /></span>
         <span class="partner-bar__dot"></span>
         <span class="partner-bar__item"><img class="partner-bar__logo" src="piklla.png" alt="Piklla" style="height:32px;" /></span>
@@ -1922,9 +2090,8 @@
           City councils respond to data, not petitions. We turn what players actually spend into a dollar figure your city can't ignore. Your submission is part of that number.
         </p>
         <ul class="form-section__checklist" aria-label="What we do with your data">
-          <li>Combined with others in your area to build the case for local courts</li>
-          <li>Receipt photos are for verification only — never shared</li>
           <li>Never sold to third parties</li>
+          <li>Combined with others in your area to build the case for local courts</li>
           <li>Delivered as an anonymized report for you to bring to city council <span class="tag-planned">Planned</span></li>
         </ul>
       </div>
@@ -1960,67 +2127,64 @@
             <span class="form-hint" id="email-hint">For campaign updates in your area.</span>
           </div>
 
-          <!-- Name -->
-          <div class="form-group">
-            <label for="field-name">Name</label>
-            <input
-              type="text"
-              id="field-name"
-              name="name"
-              autocomplete="name"
-              placeholder="Jane Smith"
-            />
-          </div>
-
-          <!-- Amount -->
-          <div class="form-group">
-            <label for="field-amount">
-              How Much Did You Spend? <span class="required" aria-label="required">*</span>
-            </label>
-            <div class="input-currency">
-              <span class="input-currency__symbol" aria-hidden="true">$</span>
+          <!-- Name + City (side by side) -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="field-name">Name</label>
               <input
-                type="number"
-                id="field-amount"
-                name="amount"
-                min="0.01"
-                step="0.01"
-                placeholder="0.00"
+                type="text"
+                id="field-name"
+                name="name"
+                autocomplete="name"
+                placeholder="Jane Smith"
+              />
+            </div>
+            <div class="form-group">
+              <label for="field-city">
+                Your City <span class="required" aria-label="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="field-city"
+                name="city"
+                autocomplete="address-level2"
+                placeholder="e.g. Austin"
                 required
               />
             </div>
-            <span class="form-hint">One transaction per submission — come back to add more.</span>
           </div>
 
-          <!-- Purpose Dropdown -->
-          <div class="form-group">
-            <label for="field-purpose">
-              What did you spend it on? <span class="required" aria-label="required">*</span>
-            </label>
-            <select id="field-purpose" name="purpose" required>
-              <option value="" disabled selected>Select a type…</option>
-              <option value="equipment_purchase">Equipment (paddle, balls, gear)</option>
-              <option value="facility_rental">Court (rental / membership)</option>
-              <option value="tournament_entry">Tournament Entry Fees</option>
-              <option value="lessons">Lessons / Coaching</option>
-            </select>
-            <span class="form-hint">Determines which advocacy report your data anonymously contributes to.</span>
-          </div>
-
-          <!-- City (full width) -->
-          <div class="form-group">
-            <label for="field-city">
-              Your City <span class="required" aria-label="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="field-city"
-              name="city"
-              autocomplete="address-level2"
-              placeholder="e.g. Austin"
-              required
-            />
-            <span class="form-hint">Helps us pinpoint which neighborhoods need courts most.</span>
+          <!-- Amount + Purpose (side by side) -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="field-amount">
+                Amount <span class="required" aria-label="required">*</span>
+              </label>
+              <div class="input-currency">
+                <span class="input-currency__symbol" aria-hidden="true">$</span>
+                <input
+                  type="number"
+                  id="field-amount"
+                  name="amount"
+                  min="0.01"
+                  step="0.01"
+                  placeholder="0.00"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="field-purpose">
+                Spent on <span class="required" aria-label="required">*</span>
+              </label>
+              <select id="field-purpose" name="purpose" required>
+                <option value="" disabled selected>Select a type…</option>
+                <option value="equipment_purchase">Equipment (paddle, balls, gear)</option>
+                <option value="facility_rental">Court (rental / membership)</option>
+                <option value="tournament_entry">Tournament Entry Fees</option>
+                <option value="lessons">Lessons / Coaching</option>
+              </select>
+            </div>
           </div>
 
           <!-- ZIP + State (side by side) -->
@@ -2071,30 +2235,8 @@
               </select>
             </div>
           </div>
+          <span class="form-hint">Your location, spend, and category are combined anonymously to build the economic case for courts in your area.</span>
 
-          <!-- File Upload -->
-          <div class="form-group">
-            <label>
-              Receipt <span class="form-hint" style="font-weight:400;">(optional — JPG, PNG, PDF · max 10 MB)</span>
-            </label>
-            <div class="file-upload">
-              <label class="file-upload__label" id="file-drop-zone" for="field-receipt">
-                <svg class="file-upload__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                </svg>
-                <p class="file-upload__text"><span>Choose a file</span> or drag and drop</p>
-                <p class="file-upload__subtext">JPG, PNG, or PDF</p>
-                <p class="file-upload__filename" id="file-name-display" aria-live="polite"></p>
-              </label>
-              <input
-                type="file"
-                id="field-receipt"
-                name="receipt_image"
-                accept="image/jpeg,image/png,application/pdf"
-              />
-            </div>
-            <span class="form-hint">Verified datapoints carry more weight in city reports.</span>
-          </div>
 
           <!-- Submit -->
           <div class="form-submit">
@@ -2139,7 +2281,7 @@
       <div class="footer__brand">
         <p class="footer__logo">PaddleClub.org</p>
         <p class="footer__tagline">
-          We turn pickleball spending into the hard data that convinces cities to build more courts.
+          Cities build what they can measure. Help us measure pickleball.
         </p>
         <span class="footer__privacy-badge">
           🔒 Privacy-First Data Collection
@@ -2153,9 +2295,10 @@
         <div>
           <p class="footer__section-title">Platform</p>
           <ul class="footer__links">
-            <li><a href="#submit">Submit Your Data</a></li>
+            <li><a href="#submit">Add Your Datapoint</a></li>
             <li><a href="mailto:contact@paddleclub.org">Contact Us</a></li>
-            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
             <li><a href="mailto:troy@paddleclub.org?subject=Brand%20%26%20Retailer%20Partnership%20Inquiry&body=Hi%20Troy%2C%0A%0AI%27m%20interested%20in%20partnering%20with%20PaddleClub.%0A%0ACompany%3A%20%0AWebsite%3A%20%0AContact%20Name%3A%20%0A">Partner With Us (Brands &amp; Retailers)</a></li>
             <li><a href="mailto:troy@paddleclub.org?subject=Club%20%26%20Facility%20Partnership%20Inquiry&body=Hi%20Troy%2C%0A%0AI%27m%20interested%20in%20partnering%20with%20PaddleClub.%0A%0AClub%2FFacility%20Name%3A%20%0ALocation%3A%20%0AContact%20Name%3A%20%0A">Partner With Us (Clubs &amp; Facilities)</a></li>
           </ul>
@@ -2165,9 +2308,8 @@
         <div class="footer__transparency">
           <p class="footer__section-title">Data Transparency</p>
           <ul class="footer__policy-list">
-            <li>Combined with others in your area to build the case for local courts</li>
-            <li>Receipt photos are for verification only — never shared</li>
             <li>Never sold to third parties</li>
+            <li>Combined with others in your area to build the case for local courts</li>
             <li>Delivered as an anonymized report for you to bring to city council <span class="tag-planned">Planned</span></li>
           </ul>
         </div>
@@ -2248,49 +2390,6 @@
     })();
 
 
-    /* ----------------------------------------------------------
-       FILE UPLOAD: Drag-and-drop + label update
-    ---------------------------------------------------------- */
-    (function initFileUpload() {
-      const input     = document.getElementById('field-receipt');
-      const dropZone  = document.getElementById('file-drop-zone');
-      const nameDisplay = document.getElementById('file-name-display');
-
-      function updateFileName(file) {
-        if (file) {
-          nameDisplay.textContent = `Selected: ${file.name}`;
-          nameDisplay.style.display = 'block';
-        } else {
-          nameDisplay.style.display = 'none';
-        }
-      }
-
-      input.addEventListener('change', () => {
-        updateFileName(input.files[0] || null);
-      });
-
-      dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.classList.add('dragover');
-      });
-
-      dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('dragover');
-      });
-
-      dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('dragover');
-        const file = e.dataTransfer?.files[0];
-        if (file) {
-          // Transfer to the hidden input via DataTransfer
-          const dt = new DataTransfer();
-          dt.items.add(file);
-          input.files = dt.files;
-          updateFileName(file);
-        }
-      });
-    })();
 
 
     /* ----------------------------------------------------------
@@ -2306,7 +2405,6 @@
          zip_code      → string
          purpose       → 'equipment_purchase' | 'facility_rental' | 'tournament_entry'
          amount        → number (transaction total in USD)
-         receipt_image → File (optional)
     ---------------------------------------------------------- */
     (function initFormHandler() {
       const form        = document.getElementById('paddleclub-form');
@@ -2365,7 +2463,6 @@
           const emailVal = form['email'].value.trim();
           showFeedback('success');
           form.reset();
-          document.getElementById('file-name-display').style.display = 'none';
           if (window._pcEmail) window._pcEmail.save(emailVal);
           return;
         }
@@ -2386,7 +2483,6 @@
           const emailVal = form['email'].value.trim();
           showFeedback('success');
           form.reset();
-          document.getElementById('file-name-display').style.display = 'none';
           if (window._pcEmail) window._pcEmail.save(emailVal);
 
         } catch (err) {
