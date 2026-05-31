@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — PaddleClub</title>
+  <meta name="description" content="How PaddleClub collects, uses, and protects your information." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --color-bg:          #F7F7F5;
+      --color-surface:     #FFFFFF;
+      --color-border:      #E2E2DC;
+      --color-text:        #1A1A18;
+      --color-text-muted:  #6B6B63;
+      --color-accent:      #1A4A7A;
+      --color-accent-lt:   #E3ECF7;
+      --color-accent-dark: #112D4E;
+      --color-gold:        #E8B84B;
+      --color-gold-dark:   #C4902A;
+      --font-sans:         'Inter', system-ui, -apple-system, sans-serif;
+      --font-serif:        'DM Serif Display', Georgia, serif;
+      --space-xs:   0.25rem;
+      --space-sm:   0.5rem;
+      --space-md:   1rem;
+      --space-lg:   1.5rem;
+      --space-xl:   2.5rem;
+      --space-2xl:  4rem;
+      --max-width:  1100px;
+      --radius-sm:  4px;
+      --radius-md:  8px;
+      --radius-lg:  12px;
+      --shadow-sm:  0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md:  0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body { font-family: var(--font-sans); font-size: 1rem; line-height: 1.6; color: var(--color-text); background: var(--color-bg); }
+    img, svg { display: block; max-width: 100%; }
+    a { color: var(--color-accent); text-decoration: underline; }
+    a:hover { color: var(--color-accent-dark); }
+    * { -webkit-tap-highlight-color: transparent; }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin-inline: auto;
+      padding-inline: var(--space-lg);
+    }
+
+    /* Nav */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding-block: var(--space-md);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    .nav__logo {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      color: var(--color-accent);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .nav__logo span {
+      color: var(--color-text-muted);
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: block;
+      margin-top: -2px;
+    }
+
+    .nav__cta {
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: var(--space-sm) var(--space-lg);
+      background: var(--color-gold);
+      color: var(--color-accent-dark);
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: background 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .nav__cta:hover { background: var(--color-gold-dark); color: #fff; }
+
+    /* Content */
+    .policy {
+      max-width: 680px;
+      margin-inline: auto;
+      padding-block: var(--space-xl);
+      padding-inline: var(--space-lg);
+    }
+
+    .policy__eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: var(--space-sm);
+    }
+
+    .policy__title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-sm);
+    }
+
+    .policy__updated {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .policy__section {
+      margin-bottom: var(--space-lg);
+    }
+
+    .policy__section h2 {
+      font-family: var(--font-sans);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: var(--space-md);
+    }
+
+    .policy__section p {
+      font-size: 0.9375rem;
+      color: var(--color-text-muted);
+      line-height: 1.75;
+      margin-bottom: var(--space-md);
+    }
+
+    .policy__section p:last-child { margin-bottom: 0; }
+
+    .policy__section ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    .policy__section ul li {
+      font-size: 0.9375rem;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+    }
+
+    .policy__section ul li::before {
+      content: '—';
+      color: var(--color-border);
+      flex-shrink: 0;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--color-accent-dark);
+      color: rgba(255,255,255,0.8);
+      padding-block: var(--space-lg) var(--space-xl);
+    }
+
+    .footer__brand {
+      padding-bottom: var(--space-md);
+      margin-bottom: var(--space-lg);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer__logo {
+      font-family: var(--font-serif);
+      font-size: 1.375rem;
+      color: #fff;
+      margin-bottom: var(--space-sm);
+    }
+
+    .footer__tagline {
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .footer__bottom {
+      margin-top: var(--space-xl);
+      padding-top: var(--space-lg);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer__copyright {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      gap: var(--space-lg);
+    }
+
+    .footer__links a {
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.45);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer__links a:hover { color: #fff; }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav" role="navigation" aria-label="Primary">
+    <div class="container nav__inner">
+      <a href="paddleclub-v2.4.html" class="nav__logo" aria-label="PaddleClub.org home">
+        PaddleClub.org
+        <span>Pickleball for All</span>
+      </a>
+      <a href="paddleclub-v2.4.html#submit" class="nav__cta">Add My Datapoint</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="policy">
+
+      <p class="policy__eyebrow">Legal</p>
+      <h1 class="policy__title">Privacy Policy</h1>
+      <p class="policy__updated">Last updated: May 2026</p>
+
+      <div class="policy__section">
+        <h2>What We Collect</h2>
+        <p>When you submit a datapoint, we collect the information you provide:</p>
+        <ul>
+          <li>Name and email address</li>
+          <li>City, state, and ZIP code</li>
+          <li>Spend amount and category</li>
+        </ul>
+        <p>We may also collect basic usage data (page visits, browser type) through standard web analytics.</p>
+      </div>
+
+      <div class="policy__section">
+        <h2>How We Use It</h2>
+        <p>Your data is used to build anonymized, aggregate advocacy reports that demonstrate pickleball's economic impact to local governments. Individual submissions are never identified in any public report or presentation.</p>
+        <p>We may use your contact information to send updates about the campaign in your area, new programs, or initiatives relevant to pickleball infrastructure. You can opt out at any time.</p>
+      </div>
+
+      <div class="policy__section">
+        <h2>Sharing</h2>
+        <p>We do not sell your personal information to third parties.</p>
+        <p>We may share information with trusted service providers and program partners who help us operate PaddleClub or facilitate programs you choose to participate in. Any such sharing is limited to what is necessary to deliver those services or programs.</p>
+        <p>If you opt into a specific program, promotion, or partnership offered through PaddleClub, we may share relevant information with the applicable partner to fulfill your participation in that program.</p>
+      </div>
+
+      <div class="policy__section">
+        <h2>Data Retention</h2>
+        <p>We retain your information for as long as necessary to fulfill the purposes described in this policy, or as required by law. You may request deletion of your data at any time by contacting us.</p>
+      </div>
+
+      <div class="policy__section">
+        <h2>Your Rights</h2>
+        <p>You may request access to, correction of, or deletion of your personal information at any time. To do so, email <a href="mailto:troy@paddleclub.org">troy@paddleclub.org</a>.</p>
+      </div>
+
+      <div class="policy__section">
+        <h2>Contact</h2>
+        <p>Questions about this policy? Reach us at <a href="mailto:troy@paddleclub.org">troy@paddleclub.org</a>.</p>
+      </div>
+
+      <div style="margin-top: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid var(--color-border); text-align: center;">
+        <p style="font-size: 0.9375rem; color: var(--color-text-muted); margin-bottom: var(--space-md);">Ready to contribute to the count?</p>
+        <a href="paddleclub-v2.4.html#submit" style="display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-sans); font-size: 0.9375rem; font-weight: 600; padding: 0.75rem 1.5rem; background: var(--color-gold); color: var(--color-accent-dark); border-radius: var(--radius-sm); text-decoration: none; transition: background 0.15s ease;">Add My Datapoint</a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__brand">
+        <p class="footer__logo">PaddleClub.org</p>
+        <p class="footer__tagline">Cities build what they can measure. Help us measure pickleball.</p>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">&copy; <span id="footer-year"></span> PaddleClub. All rights reserved.</p>
+        <ul class="footer__links">
+          <li><a href="paddleclub-v2.4.html">Home</a></li>
+          <li><a href="paddleclub-v2.4.html#submit">Add My Datapoint</a></li>
+          <li><a href="paddleclub-tos-v1.0.html">Terms of Service</a></li>
+          <li><a href="mailto:troy@paddleclub.org">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
