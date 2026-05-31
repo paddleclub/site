@@ -1,0 +1,2807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PaddleClub — Civic Advocacy for Pickleball Infrastructure</title>
+  <meta name="description" content="Quantifying the economic impact of pickleball to drive infrastructure investment in your community." />
+
+  <!-- ============================================================
+       FONTS
+       ============================================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       CSS CUSTOM PROPERTIES — edit palette/spacing here only
+       ============================================================ */
+    :root {
+      /* Colors */
+      --color-bg:          #F7F7F5;
+      --color-surface:     #FFFFFF;
+      --color-border:      #E2E2DC;
+      --color-text:        #1A1A18;
+      --color-text-muted:  #6B6B63;
+      --color-accent:      #1A4A7A;        /* Navy — civic/institutional */
+      --color-accent-lt:   #E3ECF7;        /* Light navy tint */
+      --color-accent-dark: #112D4E;        /* Deep navy */
+      --color-gold:        #E8B84B;        /* Pickleball gold — primary CTA accent */
+      --color-gold-dark:   #C4902A;        /* Gold hover/dark state */
+      --color-warning:     #B45309;
+      --color-error:       #991B1B;
+      --color-success:     #166534;
+
+      /* Typography */
+      --font-sans:   'Inter', system-ui, -apple-system, sans-serif;
+      --font-serif:  'DM Serif Display', Georgia, serif;
+
+      /* Spacing scale */
+      --space-xs:   0.25rem;
+      --space-sm:   0.5rem;
+      --space-md:   1rem;
+      --space-lg:   1.5rem;
+      --space-xl:   2.5rem;
+      --space-2xl:  4rem;
+      --space-3xl:  6rem;
+
+      /* Layout */
+      --max-width:  1100px;
+      --radius-sm:  4px;
+      --radius-md:  8px;
+      --radius-lg:  12px;
+
+      /* Shadows */
+      --shadow-sm:  0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md:  0 4px 16px rgba(0,0,0,0.08);
+      --shadow-lg:  0 8px 32px rgba(0,0,0,0.10);
+    }
+
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+
+    img, svg { display: block; max-width: 100%; }
+    a { color: var(--color-accent); text-decoration: underline; }
+    a:hover { color: var(--color-accent-dark); }
+
+    /* Touch polish */
+    * { -webkit-tap-highlight-color: transparent; }
+    button, [role="button"], a { touch-action: manipulation; }
+
+    /* ============================================================
+       LAYOUT UTILITIES
+       ============================================================ */
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin-inline: auto;
+      padding-inline: var(--space-lg);
+    }
+
+    @media (max-width: 360px) {
+      .container { padding-inline: var(--space-md); }
+    }
+
+    .section {
+      padding-block: var(--space-3xl);
+    }
+
+    .section--alt {
+      background: var(--color-surface);
+      padding-block-start: var(--space-lg);
+      padding-block-end: var(--space-md);
+    }
+
+    #submit {
+      padding-block-start: 1.67rem;
+      padding-block-end: var(--space-lg);
+    }
+
+    /* ============================================================
+       GLOBAL NAV
+       ============================================================ */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding-block: var(--space-md);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    .nav__logo {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      color: var(--color-accent);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .nav__logo span {
+      color: var(--color-text-muted);
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: block;
+      margin-top: -2px;
+    }
+
+    .nav__cta {
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: var(--space-sm) var(--space-lg);
+      background: var(--color-gold);
+      color: var(--color-accent-dark);
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: background 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .nav__cta:hover { background: var(--color-gold-dark); color: #fff; }
+
+    /* ============================================================
+       SECTION 1 — HERO
+       ============================================================ */
+    .hero {
+      background: var(--color-accent);
+      color: #fff;
+      padding-block: var(--space-3xl) 1.67rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Pickleball court line background */
+    .hero .court-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .hero__inner {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+      max-width: 740px;
+    }
+
+    .hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+    }
+
+    .hero__eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: rgba(255,255,255,0.4);
+    }
+
+    .hero__headline {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: #fff;
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    .hero__headline em {
+      font-style: normal;
+      color: var(--color-gold);
+    }
+
+    .hero__body {
+      font-size: 1.0625rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 580px;
+      line-height: 1.7;
+      text-align: center;
+      margin-inline: auto;
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-sm);
+      border: 2px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      line-height: 1;
+    }
+
+    .btn--primary {
+      background: var(--color-gold);
+      color: var(--color-accent-dark);
+      border-color: var(--color-gold);
+    }
+
+    .btn--primary:hover {
+      background: var(--color-gold-dark);
+      border-color: var(--color-gold-dark);
+      color: #fff;
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: rgba(255,255,255,0.85);
+      border-color: rgba(255,255,255,0.35);
+    }
+
+    .btn--ghost:hover {
+      border-color: rgba(255,255,255,0.7);
+      color: #fff;
+    }
+
+    .btn--solid {
+      background: var(--color-accent);
+      color: #fff;
+      border-color: var(--color-accent);
+    }
+
+    .btn--solid:hover {
+      background: var(--color-accent-dark);
+      border-color: var(--color-accent-dark);
+      color: #fff;
+    }
+
+    /* Stat bar below hero copy */
+    .hero__stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-lg);
+      padding-top: var(--space-lg);
+      border-top: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .hero__stat-item {
+      min-width: 120px;
+      flex: 1 1 120px;
+    }
+
+    .hero__stat-value {
+      font-family: var(--font-serif);
+      font-size: clamp(1.375rem, 4vw, 1.75rem);
+      color: #fff;
+      line-height: 1;
+    }
+
+    .hero__stat-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      margin-top: 4px;
+    }
+
+    @media (max-width: 480px) {
+      .hero__stats {
+        gap: var(--space-md);
+      }
+      .hero__stat-item {
+        flex: 1 1 calc(50% - var(--space-md));
+      }
+    }
+
+
+    /* ============================================================
+       SECTION 2 — SUBMISSION FORM
+       ============================================================ */
+    .form-section__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-2xl);
+      align-items: start;
+    }
+
+    @media (min-width: 768px) {
+      .form-section__grid {
+        grid-template-columns: 1fr 1.6fr;
+      }
+    }
+
+    /* Left column — explainer */
+    .form-section__intro {}
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: var(--space-md);
+    }
+
+    .section-headline {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 3.5vw, 2.125rem);
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+      margin-bottom: var(--space-md);
+    }
+
+    .section-body {
+      font-size: 0.9375rem;
+      color: var(--color-text-muted);
+      line-height: 1.75;
+    }
+
+    .form-section__checklist {
+      list-style: none;
+      margin-top: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .form-section__checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+    }
+
+    .form-section__checklist li::before {
+      content: '✓';
+      font-weight: 700;
+      color: var(--color-accent);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .tag-planned {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 99px;
+      padding: 2px 7px;
+      margin-left: 6px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    /* Form card */
+    .form-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg) var(--space-xl) 1.25rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    @media (max-width: 480px) {
+      .form-card {
+        padding: var(--space-lg);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+      }
+    }
+
+    /* Form fields — mobile-first: single column, tight spacing */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 0.375rem;
+    }
+
+    .form-group:last-of-type { margin-bottom: 0; }
+
+    /* Always two columns — only used for ZIP + State */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.375rem;
+      margin-bottom: 0.375rem;
+    }
+
+    @media (min-width: 481px) {
+      .form-row {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-md);
+        margin-bottom: 0.625rem;
+      }
+      .form-group {
+        gap: var(--space-xs);
+        margin-bottom: 0.625rem;
+      }
+    }
+
+    label {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: 0.01em;
+    }
+
+    label .required {
+      color: var(--color-warning);
+      margin-left: 2px;
+    }
+
+    .form-hint {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 0.625rem 0.875rem;
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      color: var(--color-text);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(43, 90, 62, 0.12);
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6B63' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.875rem center;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+
+    /* Currency prefix input */
+    .input-currency {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-currency__symbol {
+      position: absolute;
+      left: 0.875rem;
+      font-size: 0.9375rem;
+      color: var(--color-text-muted);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .input-currency input[type="number"] {
+      padding-left: 1.625rem;
+    }
+
+    /* Hide browser spinners on number inputs */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type="number"] { -moz-appearance: textfield; }
+
+    /* File upload */
+    .file-upload {
+      position: relative;
+    }
+
+    .file-upload__label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      padding: var(--space-xl) var(--space-lg);
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-bg);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      text-align: center;
+    }
+
+    .file-upload__label:hover,
+    .file-upload__label.dragover {
+      border-color: var(--color-accent);
+      background: var(--color-accent-lt);
+    }
+
+    .file-upload__icon {
+      width: 36px;
+      height: 36px;
+      color: var(--color-text-muted);
+    }
+
+    .file-upload__label:hover .file-upload__icon,
+    .file-upload__label.dragover .file-upload__icon {
+      color: var(--color-accent);
+    }
+
+    .file-upload__text {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+
+    .file-upload__text span {
+      color: var(--color-accent);
+      text-decoration: underline;
+    }
+
+    .file-upload__subtext {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+
+    .file-upload__filename {
+      font-size: 0.8125rem;
+      color: var(--color-accent);
+      font-weight: 500;
+      display: none;
+    }
+
+    input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Submit button + states */
+    .form-submit {
+      margin-top: var(--space-lg);
+      padding-top: var(--space-lg);
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .btn--submit {
+      width: 100%;
+      justify-content: center;
+      background: var(--color-gold);
+      color: var(--color-accent-dark);
+      border-color: var(--color-gold);
+      padding-block: 0.875rem;
+      font-size: 1rem;
+      font-weight: 700;
+      position: relative;
+    }
+
+    .btn--submit:hover:not(:disabled) {
+      background: var(--color-gold-dark);
+      border-color: var(--color-gold-dark);
+      color: #fff;
+    }
+
+    .btn--submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .form-privacy-note {
+      font-size: 0.72rem;
+      color: var(--color-text-muted);
+      text-align: center;
+    }
+
+    /* Inline form feedback */
+    .form-feedback {
+      display: none;
+      padding: var(--space-md);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-top: var(--space-md);
+    }
+
+    .form-feedback--success {
+      background: #DCFCE7;
+      color: var(--color-success);
+      border: 1px solid #BBF7D0;
+    }
+
+    .form-feedback--error {
+      background: #FEE2E2;
+      color: var(--color-error);
+      border: 1px solid #FECACA;
+    }
+
+    /* Post-submission share prompt */
+    .form-share {
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid #BBF7D0;
+      text-align: center;
+    }
+
+    .form-share__prompt {
+      font-size: 0.8125rem;
+      margin-bottom: var(--space-sm);
+    }
+
+    .form-share__actions {
+      display: flex;
+      gap: var(--space-sm);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn--share {
+      font-size: 0.8125rem;
+      padding: 0.35rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-success);
+      background: transparent;
+      color: var(--color-success);
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .btn--share:hover { background: var(--color-success); color: #fff; }
+    .btn--share--copied { background: var(--color-success) !important; color: #fff !important; }
+
+    /* ============================================================
+       SECTION 3 — LIVE IMPACT DASHBOARD
+       ============================================================ */
+    .impact-section__header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+
+    .impact-section__meta {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      background: var(--color-accent-lt);
+      padding: 3px 8px;
+      border-radius: 99px;
+    }
+
+    .live-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    .manual-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      padding: 3px 8px;
+      border-radius: 99px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    /* Embed placeholder */
+    .embed-placeholder {
+      width: 100%;
+      min-height: 480px;
+      background: var(--color-surface);
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      padding: var(--space-xl);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative corner marks */
+    .embed-placeholder::before,
+    .embed-placeholder::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--color-accent);
+      border-style: solid;
+      opacity: 0.3;
+    }
+    .embed-placeholder::before { top: 12px; left: 12px; border-width: 2px 0 0 2px; }
+    .embed-placeholder::after  { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
+
+    .embed-placeholder__icon {
+      width: 48px;
+      height: 48px;
+      color: var(--color-border);
+    }
+
+    .embed-placeholder__title {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      color: var(--color-text-muted);
+    }
+
+    .embed-placeholder__body {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      max-width: 420px;
+      line-height: 1.7;
+    }
+
+    .embed-placeholder__code {
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: var(--space-sm) var(--space-md);
+      color: var(--color-accent);
+      user-select: all;
+    }
+
+    /* Stats tray below embed */
+    .impact-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+      justify-items: center;
+    }
+
+    /* ============================================================
+       ZIP LEADERBOARD — Top 5 ZIPs by datapoint count
+       ============================================================ */
+    .zip-leaderboard {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin-top: var(--space-md);
+    }
+
+    .zip-leaderboard__header {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .zip-leaderboard__title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-muted);
+    }
+
+    .zip-leaderboard__subtitle {
+      font-size: 0.7rem;
+      color: var(--color-border);
+      font-style: italic;
+    }
+
+    .zip-leaderboard__list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .zip-leaderboard__item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: 7px var(--space-sm);
+      border-radius: var(--radius-sm);
+      transition: background 0.12s;
+    }
+
+    .zip-leaderboard__item:hover {
+      background: var(--color-bg);
+    }
+
+    .zip-leaderboard__rank {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      width: 16px;
+      text-align: center;
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
+
+    .zip-leaderboard__item:first-child .zip-leaderboard__rank {
+      color: var(--color-gold-dark);
+      opacity: 1;
+    }
+
+    .zip-leaderboard__bar-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .zip-leaderboard__zip {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--color-text);
+      min-width: 56px;
+      flex-shrink: 0;
+    }
+
+    .zip-leaderboard__bar-track {
+      flex: 1;
+      height: 4px;
+      background: var(--color-border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .zip-leaderboard__bar-fill {
+      height: 100%;
+      background: var(--color-accent-lt);
+      border-radius: 99px;
+      width: 0%;
+      transition: width 0.6s ease;
+    }
+
+    .zip-leaderboard__item:first-child .zip-leaderboard__bar-fill {
+      background: var(--color-gold);
+    }
+
+    .zip-leaderboard__count {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--color-accent);
+      min-width: 48px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* Items 6–10: hidden on desktop, shown on mobile */
+    .zip-leaderboard__item--extended { display: none; }
+
+    .zip-leaderboard__empty {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      text-align: center;
+      padding: var(--space-md) 0;
+      font-style: italic;
+    }
+
+    .impact-stat {
+      width: 100%;
+      text-align: center;
+    }
+
+    .impact-stat {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+    }
+
+    .impact-stat__value {
+      font-family: var(--font-serif);
+      font-size: 1.875rem;
+      color: var(--color-accent);
+      line-height: 1;
+    }
+
+    .impact-stat__label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-muted);
+      margin-top: var(--space-xs);
+    }
+
+    .impact-stat__note {
+      font-size: 0.7rem;
+      color: var(--color-border);
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    /* ============================================================
+       DASHBOARD TAB TOGGLE
+       ============================================================ */
+    .dashboard-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      width: fit-content;
+      margin-inline: auto;
+      margin-bottom: var(--space-md);
+    }
+
+    .dashboard-tab {
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: var(--space-sm) var(--space-lg);
+      border: none;
+      border-radius: calc(var(--radius-md) - 2px);
+      background: transparent;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+
+    .dashboard-tab--active {
+      background: var(--color-surface);
+      color: var(--color-accent);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .dashboard-tab:hover:not(.dashboard-tab--active) {
+      color: var(--color-text);
+    }
+
+    .dashboard-panel[hidden] { display: none; }
+
+    /* Donation hub CTA card */
+    .donation-hub-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      background: #FFFBF0;
+      border: 1px solid var(--color-gold);
+      border-radius: var(--radius-lg);
+      padding: 0.75rem var(--space-md);
+      margin-top: var(--space-md);
+    }
+
+    .donation-hub-cta__body {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      flex: 1;
+    }
+
+    .donation-hub-cta__icon {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      background: var(--color-gold);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-accent-dark);
+    }
+
+    .donation-hub-cta__icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .donation-hub-cta__text {}
+
+    .donation-hub-cta__headline {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-accent-dark);
+      margin-bottom: 2px;
+    }
+
+    .donation-hub-cta__desc {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+      max-width: 480px;
+    }
+
+    @media (max-width: 767px) {
+      .donation-hub-cta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .donation-hub-cta .btn--primary {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* ============================================================
+       SECTION 4 — FOOTER / MISSION + TRANSPARENCY
+       ============================================================ */
+    .footer {
+      background: var(--color-accent-dark);
+      color: rgba(255,255,255,0.8);
+      padding-block-start: var(--space-lg);
+      padding-block-end: var(--space-2xl);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer .court-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* Brand always sits full-width on top */
+    .footer__brand {
+      padding-bottom: var(--space-md);
+      margin-bottom: var(--space-lg);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* Lower row: Platform (1fr) | Transparency (2fr) — always */
+    .footer__lower {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    @media (max-width: 520px) {
+      .footer__lower { grid-template-columns: 1fr; gap: var(--space-md); }
+      .footer__lower > div:first-child { order: 2; } /* Platform moves below Transparency */
+      .footer__lower > div:last-child  { order: 1; } /* Transparency surfaces first */
+    }
+
+    .footer__logo {
+      font-family: var(--font-serif);
+      font-size: 1.375rem;
+      color: #fff;
+      margin-bottom: var(--space-sm);
+    }
+
+    .footer__tagline {
+      font-size: 0.8125rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.55);
+      max-width: 300px;
+    }
+
+    .footer__privacy-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 99px;
+      padding: 4px 12px;
+    }
+
+    .footer__section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: var(--space-md);
+    }
+
+    .footer__policy-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .footer__policy-list li {
+      font-size: 0.875rem;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      color: rgba(255,255,255,0.65);
+    }
+
+    .footer__policy-list li::before {
+      content: '—';
+      color: rgba(255,255,255,0.25);
+      flex-shrink: 0;
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .footer__links a {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer__links a:hover { color: #fff; }
+
+    .footer__bottom {
+      margin-top: var(--space-xl);
+      padding-top: var(--space-lg);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer__copyright {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .footer__disclaimer {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.25);
+      max-width: 480px;
+      text-align: right;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .footer__disclaimer { text-align: left; }
+    }
+
+    /* Data transparency: desktop sees the form checklist, mobile sees the footer version */
+    .footer__transparency { display: none; }
+    @media (max-width: 767px) {
+      .footer__transparency { display: block; }
+    }
+
+    /* ============================================================
+       PARTNER BAR
+       To hide: add class "partner-bar--hidden" to the <section>,
+       or set display:none on .partner-bar in this block.
+       ============================================================ */
+
+    /* HIDE TOGGLE — uncomment the line below to hide the bar sitewide */
+    /* .partner-bar { display: none !important; } */
+
+    .partner-bar {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding-block: 0.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Fade edges */
+    .partner-bar::before,
+    .partner-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 80px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .partner-bar::before {
+      left: 0;
+      background: linear-gradient(to right, var(--color-surface), transparent);
+    }
+
+    .partner-bar::after {
+      right: 0;
+      background: linear-gradient(to left, var(--color-surface), transparent);
+    }
+
+    .partner-bar__label {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      background: var(--color-surface);
+      padding-inline: var(--space-md);
+      z-index: 3;
+      white-space: nowrap;
+      opacity: 0.6;
+    }
+
+    .partner-bar__track {
+      display: flex;
+      width: max-content;
+      animation: marquee 28s linear infinite;
+      gap: 0;
+    }
+
+    .partner-bar__track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .partner-bar__set {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xl);
+      padding-inline: var(--space-lg);
+    }
+
+    .partner-bar__item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      opacity: 0.55;
+      transition: opacity 0.15s;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .partner-bar__item:hover {
+      opacity: 1;
+      color: var(--color-accent);
+    }
+
+    .partner-bar__logo {
+      height: 32px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+      filter: grayscale(25%) opacity(0.75);
+      transition: filter 0.15s;
+    }
+
+    .partner-bar__item:hover .partner-bar__logo {
+      filter: grayscale(0%) opacity(1);
+    }
+
+    .partner-bar__dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--color-border);
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       INSTAGRAM FEATURE CARD
+       ============================================================ */
+    .ig-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Thumbnail */
+    .ig-card__thumb {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--color-bg);
+      overflow: hidden;
+    }
+
+    .ig-card__thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 12%;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .ig-card:hover .ig-card__thumb img {
+      transform: scale(1.02);
+    }
+
+    /* Swap-ready empty state — shown when src is blank */
+    .ig-card__thumb-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      color: var(--color-text-muted);
+    }
+
+    .ig-card__thumb-placeholder svg {
+      width: 40px;
+      height: 40px;
+      opacity: 0.35;
+    }
+
+    .ig-card__thumb-placeholder p {
+      font-size: 0.8125rem;
+      opacity: 0.5;
+    }
+
+    /* Instagram badge overlay */
+    .ig-card__badge {
+      position: absolute;
+      top: var(--space-md);
+      right: var(--space-md);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 99px;
+    }
+
+    .ig-card__badge svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* Body */
+    .ig-card__body {
+      padding: 0.75rem var(--space-md);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    @media (max-width: 580px) {
+      .ig-card__body {
+        flex-direction: column;
+        padding: 0.75rem var(--space-md);
+      }
+
+      .ig-card__body .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    .ig-card__meta {
+      flex: 1;
+    }
+
+    .ig-card__handle {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-xs);
+    }
+
+    .ig-card__caption {
+      font-size: 0.9375rem;
+      color: var(--color-text);
+      line-height: 1.6;
+      max-width: 520px;
+    }
+
+    /* ============================================================
+       SPINNER (inline submit state)
+       ============================================================ */
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ============================================================
+       MOBILE-FIRST CONTENT CONDENSING  (≤ 767px)
+       Desktop sees everything. Mobile gets the shortest path to the form.
+       ============================================================ */
+    @media (max-width: 767px) {
+
+      /* Hero — remove secondary CTA */
+      .btn--ghost          { display: none; }
+
+      /* Hero — tighten padding */
+      .hero { padding-block: var(--space-xl) var(--space-xl); }
+
+      /* Form section — hide explainer copy and checklist;
+         keep only the label + headline so context isn't zero */
+      .form-section__intro .section-body,
+      .form-section__intro .form-section__checklist { display: none; }
+
+      /* Form section — reduce gap between intro and card */
+      .form-section__grid { gap: var(--space-sm); }
+
+      /* Dashboard — hide heatmap on mobile; leaderboard carries the view */
+      #panel-community .embed-placeholder { display: none; }
+
+      /* Leaderboard — show extended rows (6–10) on mobile only */
+      .zip-leaderboard__item--extended { display: flex; }
+
+      /* Dashboard — reduce embed placeholder height */
+      .embed-placeholder { min-height: 200px; padding-block: var(--space-xl); }
+
+      /* Footer — hide bottom disclaimer on mobile */
+      .footer__disclaimer { display: none; }
+    }
+
+
+    /* ============================================================
+       FOUNDER STRIP START — remove this block + the matching HTML
+       block below to revert to v1.3 with no trace.
+       ============================================================ */
+
+    .founder-strip {
+      background: var(--color-accent);
+      color: #fff;
+      padding-block: var(--space-lg);       /* tighter than --space-xl */
+    }
+
+    .founder-strip__inner {
+      text-align: center;
+    }
+
+    .founder-strip__label {
+      font-size: 0.625rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-gold);
+      margin-bottom: var(--space-xs);
+    }
+
+    .founder-strip__quote {
+      font-family: var(--font-serif);
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      line-height: 1.4;
+      color: #fff;
+      margin-bottom: var(--space-xs);
+    }
+
+    .founder-strip__byline {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .founder-strip__byline strong {
+      color: rgba(255,255,255,0.85);
+      font-weight: 600;
+    }
+
+    /* FOUNDER STRIP END ========================================= */
+
+    /* ============================================================
+       IG + DONATION HUB GRID — side by side on desktop
+       ============================================================ */
+    .ig-hub-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-md);
+      align-items: start;
+    }
+
+    /* Right-column wrapper — stacks donation hub + partner card */
+    .ig-hub-right {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .ig-hub-right .donation-hub-cta {
+      margin-top: 0;
+    }
+
+    /* Partner spotlight card */
+    .partner-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .partner-card__logo {
+      width: 96px;
+      height: 96px;
+      flex-shrink: 0;
+      background: #000;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .partner-card__logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      transform: scale(1.18);
+    }
+
+    .partner-card__content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .partner-card__label {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    .partner-card__name {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--color-accent-dark);
+      line-height: 1.3;
+    }
+
+    .partner-card__bio {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      line-height: 1.65;
+    }
+
+    .partner-card__link {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--color-accent);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      margin-top: 2px;
+    }
+
+    .partner-card__link:hover { color: var(--color-accent-dark); }
+
+    @media (min-width: 768px) {
+      .ig-hub-grid {
+        grid-template-columns: 1fr 1fr;
+        align-items: stretch;
+      }
+
+      /* Right column fills full grid height; partner card expands to fill remainder */
+      .ig-hub-right {
+        height: 100%;
+      }
+
+      .ig-hub-right .partner-card {
+        flex: 0 0 auto;
+      }
+
+      .ig-hub-grid .donation-hub-cta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .ig-hub-grid .donation-hub-cta .btn--primary {
+        width: 100%;
+        justify-content: center;
+      }
+
+      /* IG card: full height, button pinned to bottom */
+      .ig-hub-grid .ig-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .ig-hub-grid .ig-card__body {
+        flex-direction: column;
+        flex: 1;
+      }
+
+      .ig-hub-grid .ig-card__body .btn {
+        width: 100%;
+        justify-content: center;
+        margin-top: auto;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================================
+       NAV
+       ============================================================ -->
+  <nav class="nav" role="navigation" aria-label="Primary">
+    <div class="container nav__inner">
+      <a href="#" class="nav__logo" aria-label="PaddleClub.org home">
+        PaddleClub.org
+        <span>Pickleball for All</span>
+      </a>
+      <a href="#submit" class="nav__cta">Add My Datapoint</a>
+    </div>
+  </nav>
+
+
+  <!-- ============================================================
+       SECTION 1 — HERO
+       ============================================================ -->
+  <section class="hero" aria-labelledby="hero-headline">
+
+    <!-- Staircase court pattern — gold lines, no fills (Option D color scheme)
+         delta=70: right kitchen edge of each row aligns with net of next row -->
+    <svg class="court-bg" viewBox="0 0 1100 500" preserveAspectRatio="xMidYMid slice"
+         xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <defs>
+        <radialGradient id="hero-vig" cx="50%" cy="50%" r="60%">
+          <stop offset="0%"   stop-color="#1A4A7A" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="#1A4A7A" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="hero-fl" x1="0%"   y1="0%" x2="18%"  y2="0%">
+          <stop offset="0%"   stop-color="#1A4A7A" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#1A4A7A" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="hero-fr" x1="100%" y1="0%" x2="82%"  y2="0%">
+          <stop offset="0%"   stop-color="#1A4A7A" stop-opacity="0.75"/>
+          <stop offset="100%" stop-color="#1A4A7A" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="hero-ft" x1="0%" y1="0%"   x2="0%" y2="16%">
+          <stop offset="0%"   stop-color="#1A4A7A" stop-opacity="0.85"/>
+          <stop offset="100%" stop-color="#1A4A7A" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="hero-fb" x1="0%" y1="100%" x2="0%" y2="84%">
+          <stop offset="0%"   stop-color="#1A4A7A" stop-opacity="0.85"/>
+          <stop offset="100%" stop-color="#1A4A7A" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <g id="hero-courts" transform="rotate(-12, 550, 250)"></g>
+      <rect width="1100" height="500" fill="url(#hero-fl)"/>
+      <rect width="1100" height="500" fill="url(#hero-fr)"/>
+      <rect width="1100" height="500" fill="url(#hero-ft)"/>
+      <rect width="1100" height="500" fill="url(#hero-fb)"/>
+      <rect width="1100" height="500" fill="url(#hero-vig)"/>
+    </svg>
+    <script>
+      (function() {
+        var LINE  = 'rgba(255,255,255,0.24)'; /* Option A: white lines, no fills */
+        var DELTA = 70, CW = 440, CH = 200;
+        var Y0 = -600, ROWS = 11, XMIN = -700, XMAX = 1800;
+        var out = '';
+        for (var r = 0; r <= ROWS; r++) {
+          var y = Y0 + r * CH;
+          out += '<line x1="'+XMIN+'" y1="'+y+'" x2="'+XMAX+'" y2="'+y+'" stroke="'+LINE+'" stroke-width="1.5"/>';
+        }
+        for (var r = 0; r < ROWS; r++) {
+          var yT = Y0 + r * CH, yB = yT + CH, yC = yT + CH/2;
+          var offset = r * DELTA;
+          var kMin = Math.ceil((XMIN - offset) / CW) - 1;
+          var kMax = Math.floor((XMAX - offset) / CW) + 1;
+          for (var k = kMin; k <= kMax; k++) {
+            var xb = offset + k * CW;
+            if (xb + CW < XMIN || xb > XMAX) continue;
+            var xN = xb+220, xL = xb+150, xR = xb+290;
+            out += '<line x1="'+xb+'" y1="'+yT+'" x2="'+xb+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="1.5"/>';
+            out += '<line x1="'+xN+'" y1="'+yT+'" x2="'+xN+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="2"/>';
+            out += '<line x1="'+xL+'" y1="'+yT+'" x2="'+xL+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="1.5"/>';
+            out += '<line x1="'+xR+'" y1="'+yT+'" x2="'+xR+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="1.5"/>';
+            out += '<line x1="'+xb+'" y1="'+yC+'" x2="'+xL+'" y2="'+yC+'" stroke="'+LINE+'" stroke-width="1"/>';
+            out += '<line x1="'+xR+'" y1="'+yC+'" x2="'+(xb+CW)+'" y2="'+yC+'" stroke="'+LINE+'" stroke-width="1"/>';
+          }
+        }
+        document.getElementById('hero-courts').innerHTML = out;
+      })();
+    </script>
+
+    <div class="container hero__inner">
+
+      <h1 class="hero__headline" id="hero-headline">
+        Your city needs more pickleball courts. Let's <em>prove it to them.</em>
+      </h1>
+
+      <p class="hero__body">
+        Courts get built on data. Add yours.
+      </p>
+
+      <div class="hero__actions">
+        <a href="#submit" class="btn btn--primary">Add My Datapoint</a>
+        <a href="#impact" class="btn btn--ghost">View Live Data ↓</a>
+      </div>
+
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FOUNDER STRIP START — delete this entire block to revert to v1.3
+       ============================================================ -->
+  <section class="founder-strip" aria-label="A note from the founder">
+    <div class="container founder-strip__inner">
+      <p class="founder-strip__label">From the founder</p>
+      <blockquote class="founder-strip__quote">
+        "Since 2011, my family has helped cities from San Diego to Santa Monica
+        say yes to more courts... by showing real numbers.
+        <span style="color: var(--color-gold);">PaddleClub <span style="white-space: nowrap;">does the same for yours.</span></span>"
+      </blockquote>
+      <p class="founder-strip__byline">
+        <strong>Troy Hamner</strong> — Founder, PaddleClub.org
+      </p>
+    </div>
+  </section>
+  <!-- FOUNDER STRIP END ========================================= -->
+
+
+  <!-- ============================================================
+       SECTION 2 — LIVE IMPACT DASHBOARD
+       ============================================================ -->
+  <section class="section section--alt" id="impact" aria-labelledby="impact-headline">
+    <div class="container">
+
+      <div class="impact-section__header">
+        <div>
+          <p class="section-label">Community Impact</p>
+          <h2 class="section-headline" id="impact-headline">
+            What we've collected so far
+          </h2>
+        </div>
+      </div>
+
+      <!-- Tab toggle — Paddles 4 Firefighters is default -->
+      <div class="dashboard-tabs" role="tablist" aria-label="Dashboard views">
+        <button
+          class="dashboard-tab dashboard-tab--active"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-firefighter"
+          id="tab-firefighter"
+        >Paddles 4 Firefighters</button>
+        <button
+          class="dashboard-tab"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-community"
+          id="tab-community"
+        >City Data</button>
+      </div>
+
+      <!-- ── Panel: Paddles 4 Firefighters (default) ── -->
+      <div class="dashboard-panel" id="panel-firefighter" role="tabpanel" aria-labelledby="tab-firefighter">
+
+        <span class="manual-badge" style="margin-bottom: var(--space-md); display: inline-flex;">Updated manually</span>
+
+        <!-- Stats tray — firefighter drive -->
+        <div class="impact-stats" aria-label="Firefighter paddle drive statistics">
+          <div class="impact-stat">
+            <div class="impact-stat__value">~380</div>
+            <div class="impact-stat__label">Paddles Donated</div>
+          </div>
+          <div class="impact-stat">
+            <div class="impact-stat__value">$50,000</div>
+            <div class="impact-stat__label">Approximate Value</div>
+          </div>
+        </div>
+
+        <!--
+          INSTAGRAM FEATURE CARD + DONATION HUB — side by side on desktop
+        -->
+        <div class="ig-hub-grid">
+
+        <a
+          class="ig-card"
+          href="https://www.instagram.com/reel/DTbRUwYEtXK/?igsh=Mzc3ZTVlOWMwZA=="
+          data-ig-href="https://www.instagram.com/reel/DTbRUwYEtXK/?igsh=Mzc3ZTVlOWMwZA=="
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="View Firefighter Paddle Drive post on Instagram"
+          style="display:block; text-decoration:none; color:inherit;"
+        >
+          <div class="ig-card__thumb">
+            <!--
+              SWAP: Replace src="" with your photo URL or relative path.
+              e.g. src="img/firefighter-paddle-drive.jpg"
+                   src="https://YOUR_CDN/photo.jpg"
+            -->
+            <img
+              src="Paddles4FirefightersCover.jpeg"
+              alt="Firefighters receiving paddle donations at a local fire station"
+              id="ig-thumb-img"
+            />
+            <!-- Shown only when src is empty — remove once real image is added -->
+            <div class="ig-card__thumb-placeholder" id="ig-thumb-placeholder">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3 21h18M6.75 6.75h.008v.008H6.75V6.75z" />
+              </svg>
+              <p>Add photo to activate</p>
+            </div>
+            <div class="ig-card__badge" aria-hidden="true">
+              <!-- Instagram icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+              </svg>
+              Troy Hamner
+            </div>
+          </div>
+
+          <div class="ig-card__body">
+            <div class="ig-card__meta">
+              <p class="ig-card__caption">
+                After the LA fires, I set out to get every LA firefighter a paddle in thanks, then I found out there's almost 9,000... So I need your extras.
+              </p>
+            </div>
+            <span class="btn btn--solid" style="flex-shrink:0;">View on Instagram ↗</span>
+          </div>
+        </a>
+
+        <!-- Right column: donation hub + partner card -->
+        <div class="ig-hub-right">
+
+          <!-- Donation hub CTA -->
+          <div class="donation-hub-cta" role="complementary" aria-label="Register your club as a donation hub">
+            <div class="donation-hub-cta__body">
+              <div class="donation-hub-cta__icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+                </svg>
+              </div>
+              <div class="donation-hub-cta__text">
+                <p class="donation-hub-cta__headline">Become a donation hub</p>
+                <p class="donation-hub-cta__desc">Collect paddle donations from your community — we'll pick them up and deliver them to firefighters across LA.</p>
+              </div>
+            </div>
+            <a href="mailto:troy@paddleclub.org?subject=Donation%20Hub%20Inquiry&body=Hi%20Troy%2C%0A%0AI%27d%20like%20to%20register%20my%20club%20as%20a%20donation%20hub%20for%20the%20Paddles%204%20Firefighters%20drive.%0A%0AClub%2FFacility%20Name%3A%20%0ALocation%3A%20%0AContact%20Name%3A%20%0A" class="btn btn--primary">Become a Hub →</a>
+          </div>
+
+          <!-- Partner spotlight: County Fire Pickleball -->
+          <!--
+            LOGO: Save the CFPB logo as "cfpb-logo.png" in the PaddleClub folder
+            to activate the image below.
+          -->
+          <div class="partner-card" aria-label="Distribution partner: County Fire Pickleball">
+            <div class="partner-card__logo">
+              <img src="cfpb-logo.png" alt="County Fire Pickleball logo" />
+            </div>
+            <div class="partner-card__content">
+              <p class="partner-card__label">Distribution Partner</p>
+              <p class="partner-card__name">County Fire Pickleball</p>
+              <a href="https://www.countyfirepickleball.com" class="partner-card__link" target="_blank" rel="noopener noreferrer">countyfirepickleball.com ↗</a>
+            </div>
+          </div>
+
+        </div><!-- /.ig-hub-right -->
+
+        </div><!-- /.ig-hub-grid -->
+
+      </div>
+
+      <!-- ── Panel: Community Data ── -->
+      <div class="dashboard-panel" id="panel-community" role="tabpanel" aria-labelledby="tab-community" hidden>
+
+        <div style="display: inline-flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md); font-size: 0.8125rem; color: var(--color-text-muted);">
+          <span class="live-badge">Live</span>
+          Auto-updated with each submission
+        </div>
+
+        <!-- Stats tray — wire to Baserow API -->
+        <div class="impact-stats" aria-label="Community impact statistics">
+          <div class="impact-stat">
+            <div class="impact-stat__value" id="stat-datapoints">—</div>
+            <div class="impact-stat__label">Total Datapoints</div>
+          </div>
+          <div class="impact-stat">
+            <div class="impact-stat__value" id="stat-zipcodes-dashboard">—</div>
+            <div class="impact-stat__label">ZIP Codes</div>
+          </div>
+        </div>
+
+        <!--
+          EMBED INSERTION POINT — Community Data
+          Replace the .embed-placeholder div with your Flourish or Looker Studio <iframe>.
+        -->
+        <div class="embed-placeholder" aria-label="Community data dashboard embed placeholder">
+          <svg class="embed-placeholder__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503-10.498l4.875 2.438a1.5 1.5 0 010 2.625l-4.875 2.437a1.5 1.5 0 01-2.006-1.413V7.664c0-.805.88-1.318 1.606-.912z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <h3 class="embed-placeholder__title">Community Impact Map</h3>
+          <p class="embed-placeholder__body">
+            Replace this block with your Flourish, Looker Studio, or custom visualization iframe. Pre-sized to 480px height and full width.
+          </p>
+          <code class="embed-placeholder__code">&lt;!-- INSERT EMBED IFRAME HERE --&gt;</code>
+        </div>
+
+        <!-- Top 5 Cities leaderboard — wire to Baserow API -->
+        <div class="zip-leaderboard" aria-label="Top 5 cities by datapoints">
+          <div class="zip-leaderboard__header">
+            <p class="zip-leaderboard__title">Top 5 Cities by Data Submitted</p>
+          </div>
+          <ol class="zip-leaderboard__list" id="zip-leaderboard-list">
+            <li class="zip-leaderboard__item">
+              <span class="zip-leaderboard__rank">1</span>
+              <div class="zip-leaderboard__bar-wrap">
+                <span class="zip-leaderboard__zip" data-city>—</span>
+                <div class="zip-leaderboard__bar-track"><div class="zip-leaderboard__bar-fill" data-bar></div></div>
+              </div>
+              <span class="zip-leaderboard__count" data-count>—</span>
+            </li>
+            <li class="zip-leaderboard__item">
+              <span class="zip-leaderboard__rank">2</span>
+              <div class="zip-leaderboard__bar-wrap">
+                <span class="zip-leaderboard__zip" data-city>—</span>
+                <div class="zip-leaderboard__bar-track"><div class="zip-leaderboard__bar-fill" data-bar></div></div>
+              </div>
+              <span class="zip-leaderboard__count" data-count>—</span>
+            </li>
+            <li class="zip-leaderboard__item">
+              <span class="zip-leaderboard__rank">3</span>
+              <div class="zip-leaderboard__bar-wrap">
+                <span class="zip-leaderboard__zip" data-city>—</span>
+                <div class="zip-leaderboard__bar-track"><div class="zip-leaderboard__bar-fill" data-bar></div></div>
+              </div>
+              <span class="zip-leaderboard__count" data-count>—</span>
+            </li>
+            <li class="zip-leaderboard__item">
+              <span class="zip-leaderboard__rank">4</span>
+              <div class="zip-leaderboard__bar-wrap">
+                <span class="zip-leaderboard__zip" data-city>—</span>
+                <div class="zip-leaderboard__bar-track"><div class="zip-leaderboard__bar-fill" data-bar></div></div>
+              </div>
+              <span class="zip-leaderboard__count" data-count>—</span>
+            </li>
+            <li class="zip-leaderboard__item">
+              <span class="zip-leaderboard__rank">5</span>
+              <div class="zip-leaderboard__bar-wrap">
+                <span class="zip-leaderboard__zip" data-city>—</span>
+                <div class="zip-leaderboard__bar-track"><div class="zip-leaderboard__bar-fill" data-bar></div></div>
+              </div>
+              <span class="zip-leaderboard__count" data-count>—</span>
+            </li>
+          </ol>
+        </div>
+
+        <!-- Map placeholder -->
+        <!-- MAP BLOCK — set display:none to hidden; remove to re-enable -->
+        <div style="display:none; margin-top: var(--space-lg); border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface);">
+          <div style="padding: var(--space-sm) var(--space-md); border-bottom: 1px solid var(--color-border); display: flex; align-items: center; gap: var(--space-sm);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-text-muted); flex-shrink:0;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+            </svg>
+            <span style="font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-muted);">Map (work in progress)</span>
+          </div>
+          <div style="position:relative;">
+            <img src="wikipediamap.png" alt="USA map placeholder" style="width:100%; display:block; object-fit:cover;" />
+            <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(26,74,122,0.72); color:#fff; text-align:center; padding:0.5rem 1rem; font-size:0.8125rem; font-weight:600; letter-spacing:0.05em; backdrop-filter:blur(2px);">
+              Example while I figure this out
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       PARTNER BAR
+       To hide: uncomment the CSS rule above, or add style="display:none"
+       to this <section> tag.
+       To add a partner: duplicate a .partner-bar__item in BOTH .partner-bar__set
+       blocks (the second is a clone for seamless looping).
+       ============================================================ -->
+  <section class="partner-bar" aria-label="Partners and coverage">
+    <div class="partner-bar__track">
+
+      <!-- SET 1 — original (logos repeated to fill wide screens) -->
+      <div class="partner-bar__set">
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="dupr.png" alt="DUPR" style="height:20px;" /></span>
+        <span class="partner-bar__dot" aria-hidden="true"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="piklla.png" alt="Piklla" style="height:32px;" /></span>
+        <span class="partner-bar__dot" aria-hidden="true"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="Get2eleventhin.webp" alt="Get2Eleven" style="height:38px;" /></span>
+        <span class="partner-bar__dot" aria-hidden="true"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="cfpb-logo.png" alt="County Fire Pickleball" style="height:40px;" /></span>
+        <span class="partner-bar__dot" aria-hidden="true"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="dupr.png" alt="DUPR" style="height:20px;" /></span>
+        <span class="partner-bar__dot" aria-hidden="true"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="piklla.png" alt="Piklla" style="height:32px;" /></span>
+        <span class="partner-bar__dot" aria-hidden="true"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="Get2eleventhin.webp" alt="Get2Eleven" style="height:38px;" /></span>
+        <span class="partner-bar__dot" aria-hidden="true"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="cfpb-logo.png" alt="County Fire Pickleball" style="height:40px;" /></span>
+        <span class="partner-bar__dot" aria-hidden="true"></span>
+      </div>
+
+      <!-- SET 2 — exact clone for seamless loop -->
+      <div class="partner-bar__set" aria-hidden="true">
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="dupr.png" alt="DUPR" style="height:20px;" /></span>
+        <span class="partner-bar__dot"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="piklla.png" alt="Piklla" style="height:32px;" /></span>
+        <span class="partner-bar__dot"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="Get2eleventhin.webp" alt="Get2Eleven" style="height:38px;" /></span>
+        <span class="partner-bar__dot"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="cfpb-logo.png" alt="County Fire Pickleball" style="height:40px;" /></span>
+        <span class="partner-bar__dot"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="dupr.png" alt="DUPR" style="height:20px;" /></span>
+        <span class="partner-bar__dot"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="piklla.png" alt="Piklla" style="height:32px;" /></span>
+        <span class="partner-bar__dot"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="Get2eleventhin.webp" alt="Get2Eleven" style="height:38px;" /></span>
+        <span class="partner-bar__dot"></span>
+        <span class="partner-bar__item"><img class="partner-bar__logo" src="cfpb-logo.png" alt="County Fire Pickleball" style="height:40px;" /></span>
+        <span class="partner-bar__dot"></span>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 3 — SUBMISSION FORM
+       ============================================================ -->
+  <section class="section" id="submit" aria-labelledby="form-headline">
+    <div class="container form-section__grid">
+
+      <!-- Left: Explainer -->
+      <div class="form-section__intro">
+        <p class="section-label">Add Your Datapoint</p>
+        <h2 class="section-headline" id="form-headline">
+          Each submission adds leverage with your city.
+        </h2>
+        <p class="section-body">
+          City councils respond to data, not petitions. We turn what players actually spend into a dollar figure your city can't ignore. Your submission is part of that number.
+        </p>
+        <ul class="form-section__checklist" aria-label="What we do with your data">
+          <li>Never sold to third parties</li>
+          <li>Combined with others in your area to build the case for local courts</li>
+          <li>Personal information always stays anonymous</li>
+          <li>Delivered as an anonymized report for you to bring to city council <span class="tag-planned">Planned</span></li>
+        </ul>
+      </div>
+
+      <!-- Right: Form card -->
+      <div class="form-card" role="region" aria-label="Community data submission form">
+
+        <!--
+          FORM INTEGRATION NOTE:
+          • id="paddleclub-form" — hook for the JS fetch handler below
+          • data-action attribute — replace with your Activepieces webhook URL
+          • File is submitted as FormData (multipart/form-data)
+        -->
+        <form
+          id="paddleclub-form"
+          novalidate
+          data-action="https://YOUR_ACTIVEPIECES_WEBHOOK_URL_HERE"
+        >
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="field-email">
+              Email <span class="required" aria-label="required">*</span>
+            </label>
+            <input
+              type="email"
+              id="field-email"
+              name="email"
+              autocomplete="email"
+              placeholder="jane@example.com"
+              required
+            />
+            <span class="form-hint" id="email-hint">For campaign updates in your area.</span>
+          </div>
+
+          <!-- Name + City (side by side) -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="field-name">Name</label>
+              <input
+                type="text"
+                id="field-name"
+                name="name"
+                autocomplete="name"
+                placeholder="Jane Smith"
+              />
+            </div>
+            <div class="form-group">
+              <label for="field-city">
+                Your City <span class="required" aria-label="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="field-city"
+                name="city"
+                autocomplete="address-level2"
+                placeholder="e.g. Austin"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Amount + Purpose (side by side) -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="field-amount">
+                Amount <span class="required" aria-label="required">*</span>
+              </label>
+              <div class="input-currency">
+                <span class="input-currency__symbol" aria-hidden="true">$</span>
+                <input
+                  type="number"
+                  id="field-amount"
+                  name="amount"
+                  min="0.01"
+                  step="0.01"
+                  placeholder="0.00"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="field-purpose">
+                Spent on <span class="required" aria-label="required">*</span>
+              </label>
+              <select id="field-purpose" name="purpose" required>
+                <option value="" disabled selected>Select a type…</option>
+                <option value="equipment_purchase">Equipment (paddle, balls, gear)</option>
+                <option value="facility_rental">Court (rental / membership)</option>
+                <option value="tournament_entry">Tournament Entry Fees</option>
+                <option value="lessons">Lessons / Coaching</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ZIP + State (side by side) -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="field-zip">ZIP Code</label>
+              <input
+                type="text"
+                id="field-zip"
+                name="zip_code"
+                autocomplete="postal-code"
+                placeholder="e.g. 90210"
+                maxlength="10"
+                pattern="[0-9]{5}(-[0-9]{4})?"
+              />
+            </div>
+            <div class="form-group">
+              <label for="field-state">
+                State <span class="required" aria-label="required">*</span>
+              </label>
+              <select id="field-state" name="state" autocomplete="address-level1" required>
+                <option value="">Select…</option>
+                <option value="AL">AL</option><option value="AK">AK</option>
+                <option value="AZ">AZ</option><option value="AR">AR</option>
+                <option value="CA">CA</option><option value="CO">CO</option>
+                <option value="CT">CT</option><option value="DE">DE</option>
+                <option value="FL">FL</option><option value="GA">GA</option>
+                <option value="HI">HI</option><option value="ID">ID</option>
+                <option value="IL">IL</option><option value="IN">IN</option>
+                <option value="IA">IA</option><option value="KS">KS</option>
+                <option value="KY">KY</option><option value="LA">LA</option>
+                <option value="ME">ME</option><option value="MD">MD</option>
+                <option value="MA">MA</option><option value="MI">MI</option>
+                <option value="MN">MN</option><option value="MS">MS</option>
+                <option value="MO">MO</option><option value="MT">MT</option>
+                <option value="NE">NE</option><option value="NV">NV</option>
+                <option value="NH">NH</option><option value="NJ">NJ</option>
+                <option value="NM">NM</option><option value="NY">NY</option>
+                <option value="NC">NC</option><option value="ND">ND</option>
+                <option value="OH">OH</option><option value="OK">OK</option>
+                <option value="OR">OR</option><option value="PA">PA</option>
+                <option value="RI">RI</option><option value="SC">SC</option>
+                <option value="SD">SD</option><option value="TN">TN</option>
+                <option value="TX">TX</option><option value="UT">UT</option>
+                <option value="VT">VT</option><option value="VA">VA</option>
+                <option value="WA">WA</option><option value="WV">WV</option>
+                <option value="WI">WI</option><option value="WY">WY</option>
+              </select>
+            </div>
+          </div>
+          <span class="form-hint">Your location, spend, and category are combined anonymously to build the economic case for courts in your area.</span>
+
+
+          <!-- Submit -->
+          <div class="form-submit">
+            <button type="submit" class="btn btn--submit" id="submit-btn">
+              <span id="submit-text">Add My Datapoint</span>
+              <span class="spinner" id="submit-spinner" aria-hidden="true"></span>
+            </button>
+            <p class="form-privacy-note">
+              🔒 I will never sell your info, but I do need it to help you advocate for your community more effectively.
+            </p>
+          </div>
+
+          <!-- Feedback messages -->
+          <div class="form-feedback form-feedback--success" id="form-success" role="alert" aria-live="polite">
+            ✓ Submission received. Thank you — your datapoint contributes to the community data effort for your area.
+            <div class="form-share">
+              <p class="form-share__prompt">Know another player? Send them here.</p>
+              <div class="form-share__actions">
+                <button class="btn--share" id="share-native" style="display:none">Share →</button>
+                <button class="btn--share" id="share-copy">Copy Link</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-feedback form-feedback--error" id="form-error" role="alert" aria-live="polite">
+            Submission failed. Please check your connection and try again. If the issue persists, contact us directly.
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 4 — FOOTER / MISSION + TRANSPARENCY
+       ============================================================ -->
+  <footer class="footer" role="contentinfo">
+
+    <!-- Staircase court pattern — half scale of hero (courts at 220×100px) so more rows
+         visible across the footer height. Alignment preserved: DELTA=35 keeps
+         kitchen right edge aligned with next row's net. -->
+    <svg class="court-bg" viewBox="0 0 1100 400" preserveAspectRatio="xMidYMid slice"
+         xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="foot-ft" x1="0%" y1="0%"   x2="0%" y2="100%">
+          <stop offset="0%"   stop-color="#112D4E" stop-opacity="0.85"/>
+          <stop offset="7%"   stop-color="#112D4E" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#112D4E" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="foot-fb" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%"   stop-color="#112D4E" stop-opacity="0.9"/>
+          <stop offset="10%"  stop-color="#112D4E" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#112D4E" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="foot-fl" x1="0%" y1="0%"   x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#112D4E" stop-opacity="0.9"/>
+          <stop offset="10%"  stop-color="#112D4E" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#112D4E" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="foot-fr" x1="100%" y1="0%" x2="0%"   y2="0%">
+          <stop offset="0%"   stop-color="#112D4E" stop-opacity="0.9"/>
+          <stop offset="10%"  stop-color="#112D4E" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#112D4E" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <g id="footer-courts" transform="rotate(-12, 550, 200)"></g>
+      <rect width="1100" height="400" fill="url(#foot-ft)"/>
+      <rect width="1100" height="400" fill="url(#foot-fb)"/>
+      <rect width="1100" height="400" fill="url(#foot-fl)"/>
+      <rect width="1100" height="400" fill="url(#foot-fr)"/>
+    </svg>
+    <script>
+      (function() {
+        var LINE  = 'rgba(255,255,255,0.08)';
+        var DELTA = 35, CW = 220, CH = 100;
+        var Y0 = -400, ROWS = 14, XMIN = -700, XMAX = 1800;
+        var out = '';
+        for (var r = 0; r <= ROWS; r++) {
+          var y = Y0 + r * CH;
+          out += '<line x1="'+XMIN+'" y1="'+y+'" x2="'+XMAX+'" y2="'+y+'" stroke="'+LINE+'" stroke-width="0.75"/>';
+        }
+        for (var r = 0; r < ROWS; r++) {
+          var yT = Y0 + r * CH, yB = yT + CH, yC = yT + CH/2;
+          var offset = r * DELTA;
+          var kMin = Math.ceil((XMIN - offset) / CW) - 1;
+          var kMax = Math.floor((XMAX - offset) / CW) + 1;
+          for (var k = kMin; k <= kMax; k++) {
+            var xb = offset + k * CW;
+            if (xb + CW < XMIN || xb > XMAX) continue;
+            var xN = xb+110, xL = xb+75, xR = xb+145;
+            out += '<line x1="'+xb+'" y1="'+yT+'" x2="'+xb+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="0.75"/>';
+            out += '<line x1="'+xN+'" y1="'+yT+'" x2="'+xN+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="1"/>';
+            out += '<line x1="'+xL+'" y1="'+yT+'" x2="'+xL+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="0.75"/>';
+            out += '<line x1="'+xR+'" y1="'+yT+'" x2="'+xR+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="0.75"/>';
+            out += '<line x1="'+xb+'" y1="'+yC+'" x2="'+xL+'" y2="'+yC+'" stroke="'+LINE+'" stroke-width="0.5"/>';
+            out += '<line x1="'+xR+'" y1="'+yC+'" x2="'+(xb+CW)+'" y2="'+yC+'" stroke="'+LINE+'" stroke-width="0.5"/>';
+          }
+        }
+        document.getElementById('footer-courts').innerHTML = out;
+      })();
+    </script>
+    <div class="container">
+
+      <!-- Brand — always full width on top -->
+      <div class="footer__brand">
+        <p class="footer__logo">PaddleClub.org</p>
+        <p class="footer__tagline">
+          Cities build what they can measure. Help us measure pickleball.
+        </p>
+        <span class="footer__privacy-badge">
+          🔒 Privacy-First Data Collection
+        </span>
+      </div>
+
+      <!-- Lower row: Platform left, Data Transparency right -->
+      <div class="footer__lower">
+
+        <!-- Platform links -->
+        <div>
+          <p class="footer__section-title">Platform</p>
+          <ul class="footer__links">
+            <li><a href="#submit">Add Your Datapoint</a></li>
+            <li><a href="mailto:contact@paddleclub.org">Contact Us</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="mailto:troy@paddleclub.org?subject=Brand%20%26%20Retailer%20Partnership%20Inquiry&body=Hi%20Troy%2C%0A%0AI%27m%20interested%20in%20partnering%20with%20PaddleClub.%0A%0ACompany%3A%20%0AWebsite%3A%20%0AContact%20Name%3A%20%0A">Partner With Us (Brands &amp; Retailers)</a></li>
+            <li><a href="mailto:troy@paddleclub.org?subject=Club%20%26%20Facility%20Partnership%20Inquiry&body=Hi%20Troy%2C%0A%0AI%27m%20interested%20in%20partnering%20with%20PaddleClub.%0A%0AClub%2FFacility%20Name%3A%20%0ALocation%3A%20%0AContact%20Name%3A%20%0A">Partner With Us (Clubs &amp; Facilities)</a></li>
+          </ul>
+        </div>
+
+        <!-- Data transparency — mobile only (desktop sees the form checklist) -->
+        <div class="footer__transparency">
+          <p class="footer__section-title">Data Transparency</p>
+          <ul class="footer__policy-list">
+            <li>Never sold to third parties</li>
+            <li>Combined with others in your area to build the case for local courts</li>
+            <li>Personal information always stays anonymous</li>
+            <li>Delivered as an anonymized report for you to bring to city council <span class="tag-planned">Planned</span></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__copyright">
+          &copy; <span id="footer-year"></span> PaddleClub. All rights reserved.
+        </p>
+        <p class="footer__disclaimer">
+          Economic data is aggregated and anonymized before use in any public report or government presentation.
+        </p>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+       ============================================================ -->
+  <script>
+    /* ----------------------------------------------------------
+       UTILITY: Set current year in footer
+    ---------------------------------------------------------- */
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+
+    /* ----------------------------------------------------------
+       EMAIL MEMORY
+       Saves the submitter's email to localStorage after a successful
+       submission and pre-fills it on return visits.
+    ---------------------------------------------------------- */
+    (function initEmailMemory() {
+      const KEY   = 'paddleclub_email';
+      const input = document.getElementById('field-email');
+      const hint  = document.getElementById('email-hint');
+
+      function showNotYou() {
+        hint.innerHTML = 'Welcome back! <button type="button" id="not-you-btn" style="background:none;border:none;color:var(--color-accent);font-size:inherit;font-family:inherit;text-decoration:underline;cursor:pointer;padding:0;">Not you?</button>';
+        document.getElementById('not-you-btn').addEventListener('click', () => {
+          localStorage.removeItem(KEY);
+          input.value = '';
+          hint.textContent = 'For campaign updates in your area.';
+          input.focus();
+        });
+      }
+
+      // Pre-fill on page load if a previous email is stored
+      const saved = localStorage.getItem(KEY);
+      if (saved) {
+        input.value = saved;
+        showNotYou();
+      }
+
+      // Expose save + re-fill for the form handler
+      window._pcEmail = {
+        save(email) {
+          localStorage.setItem(KEY, email);
+          input.value = email;
+          showNotYou();
+        }
+      };
+    })();
+
+
+    /* ----------------------------------------------------------
+       INSTAGRAM CARD: Hide placeholder once real image src is set
+    ---------------------------------------------------------- */
+    (function initIgCard() {
+      const img         = document.getElementById('ig-thumb-img');
+      const placeholder = document.getElementById('ig-thumb-placeholder');
+      if (!img || !placeholder) return;
+      if (img.src && !img.src.endsWith('/')) {
+        placeholder.style.display = 'none';
+      }
+    })();
+
+
+
+
+    /* ----------------------------------------------------------
+       FORM SUBMISSION
+       Async fetch handler — ready for Activepieces/Baserow webhook.
+       Replace the webhook URL in the form's data-action attribute.
+
+       Payload structure (FormData):
+         name          → string
+         email         → string
+         city          → string
+         state         → string (2-letter abbreviation)
+         zip_code      → string
+         purpose       → 'equipment_purchase' | 'facility_rental' | 'tournament_entry'
+         amount        → number (transaction total in USD)
+    ---------------------------------------------------------- */
+    (function initFormHandler() {
+      const form        = document.getElementById('paddleclub-form');
+      const submitBtn   = document.getElementById('submit-btn');
+      const submitText  = document.getElementById('submit-text');
+      const spinner     = document.getElementById('submit-spinner');
+      const successMsg  = document.getElementById('form-success');
+      const errorMsg    = document.getElementById('form-error');
+
+      function setLoading(loading) {
+        submitBtn.disabled  = loading;
+        submitText.textContent = loading ? 'Submitting…' : 'Add My Datapoint';
+        spinner.style.display  = loading ? 'inline-block' : 'none';
+      }
+
+      function showFeedback(type) {
+        successMsg.style.display = type === 'success' ? 'block' : 'none';
+        errorMsg.style.display   = type === 'error'   ? 'block' : 'none';
+      }
+
+      function validateForm() {
+        const email   = form['email'].value.trim();
+        const city    = form['city'].value.trim();
+        const state   = form['state'].value.trim();
+        const purpose = form['purpose'].value;
+        const amount  = parseFloat(form['amount'].value);
+
+        // Required: email, city, state, purpose, amount
+        if (!email || !city || !state || !purpose) return false;
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return false;
+        if (isNaN(amount) || amount <= 0) return false;
+
+        // Optional: ZIP — validate format only if provided
+        const zip = form['zip_code'].value.trim();
+        if (zip && !/^\d{5}(-\d{4})?$/.test(zip)) return false;
+
+        return true;
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        showFeedback(null);
+
+        if (!validateForm()) {
+          showFeedback('error');
+          errorMsg.textContent = 'Please fill in all required fields with valid information.';
+          return;
+        }
+
+        const webhookUrl = form.dataset.action;
+        if (!webhookUrl || webhookUrl.includes('YOUR_ACTIVEPIECES')) {
+          /* Development stub — log payload and show success for preview */
+          console.log('[PaddleClub] Webhook URL not yet configured. FormData payload:',
+            Object.fromEntries(new FormData(form).entries())
+          );
+          const emailVal = form['email'].value.trim();
+          showFeedback('success');
+          form.reset();
+          if (window._pcEmail) window._pcEmail.save(emailVal);
+          return;
+        }
+
+        /* Live submission */
+        setLoading(true);
+        try {
+          const payload = new FormData(form);
+
+          const response = await fetch(webhookUrl, {
+            method: 'POST',
+            body: payload,
+            /* Do NOT set Content-Type — browser sets multipart boundary automatically */
+          });
+
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+          const emailVal = form['email'].value.trim();
+          showFeedback('success');
+          form.reset();
+          if (window._pcEmail) window._pcEmail.save(emailVal);
+
+        } catch (err) {
+          console.error('[PaddleClub] Submission error:', err);
+          showFeedback('error');
+        } finally {
+          setLoading(false);
+        }
+      });
+    })();
+
+
+    /* ----------------------------------------------------------
+       POST-SUBMISSION SHARE PROMPT
+    ---------------------------------------------------------- */
+    (function initShareButtons() {
+      const shareUrl  = window.location.href.split('#')[0]; // clean URL, no hash
+      const shareText = 'I just added my pickleball datapoint to PaddleClub — helping cities say yes to more courts. Add yours:';
+
+      const nativeBtn = document.getElementById('share-native');
+      const copyBtn   = document.getElementById('share-copy');
+
+      /* Show native share button only on devices that support it */
+      if (navigator.share) {
+        nativeBtn.style.display = 'inline-block';
+        nativeBtn.addEventListener('click', () => {
+          navigator.share({ title: 'PaddleClub', text: shareText, url: shareUrl })
+            .catch(() => {}); /* user cancelled — silent */
+        });
+      }
+
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          copyBtn.textContent = 'Copied!';
+          copyBtn.classList.add('btn--share--copied');
+          setTimeout(() => {
+            copyBtn.textContent = 'Copy Link';
+            copyBtn.classList.remove('btn--share--copied');
+          }, 2000);
+        }).catch(() => {
+          /* Fallback for older browsers */
+          const ta = document.createElement('textarea');
+          ta.value = shareUrl;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          copyBtn.textContent = 'Copied!';
+          setTimeout(() => { copyBtn.textContent = 'Copy Link'; }, 2000);
+        });
+      });
+    })();
+
+
+    /* ----------------------------------------------------------
+       DASHBOARD TAB SWITCHER
+    ---------------------------------------------------------- */
+    (function initDashboardTabs() {
+      const tabs   = document.querySelectorAll('.dashboard-tab');
+      const panels = document.querySelectorAll('.dashboard-panel');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => {
+            t.classList.remove('dashboard-tab--active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          panels.forEach(p => p.setAttribute('hidden', ''));
+
+          tab.classList.add('dashboard-tab--active');
+          tab.setAttribute('aria-selected', 'true');
+          document.getElementById(tab.getAttribute('aria-controls')).removeAttribute('hidden');
+        });
+      });
+    })();
+
+
+    /* ----------------------------------------------------------
+       STATS PLACEHOLDER
+       Wire this to your Baserow API to pull live aggregate counts.
+       Replace each assignment with a fetch() to your Baserow view.
+
+       Example endpoint:
+         GET https://api.baserow.io/api/database/rows/table/YOUR_TABLE_ID/
+             ?user_field_names=true&search=&filter__field_xxx__xxx=
+    ---------------------------------------------------------- */
+    (function initStats() {
+      // Placeholder values — replace with live Baserow API calls
+      const stats = {
+        'stat-datapoints':        '—',  // e.g. '1,248'
+        'stat-zipcodes-dashboard':'—',  // e.g. '64'
+      };
+
+      Object.entries(stats).forEach(([id, value]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      });
+    })();
+
+
+    /* ----------------------------------------------------------
+       ZIP CODE LEADERBOARD
+       Wire this to Baserow: query your submissions table,
+       group by zip_code, COUNT(*) DESC, LIMIT 5.
+
+       Example Baserow aggregation endpoint:
+         GET https://api.baserow.io/api/database/rows/table/TABLE_ID/
+             ?user_field_names=true
+             &view_id=VIEW_ID_WITH_GROUPED_ZIP
+             (or use a formula field / Baserow view for pre-grouped data)
+
+       Expected data shape:
+         [ { city: 'Austin', count: 47 }, { city: 'Denver', count: 38 }, … ]
+    ---------------------------------------------------------- */
+    (function initZipLeaderboard() {
+      const list = document.getElementById('zip-leaderboard-list');
+      if (!list) return;
+
+      /**
+       * Populate leaderboard rows.
+       * @param {Array<{city: string, count: number}>} data — sorted descending by count
+       */
+      function renderLeaderboard(data) {
+        const rows     = list.querySelectorAll('.zip-leaderboard__item');
+        const maxCount = data[0]?.count || 1;
+
+        rows.forEach((row, i) => {
+          const entry    = data[i];
+          const cityEl   = row.querySelector('[data-city]');
+          const countEl  = row.querySelector('[data-count]');
+          const barEl    = row.querySelector('[data-bar]');
+
+          if (entry) {
+            cityEl.textContent  = entry.city;
+            countEl.textContent = entry.count.toLocaleString() + ' pts';
+            // Animate bar width proportional to leader
+            requestAnimationFrame(() => {
+              barEl.style.width = ((entry.count / maxCount) * 100) + '%';
+            });
+          } else {
+            zipEl.textContent   = '—';
+            countEl.textContent = '—';
+            barEl.style.width   = '0%';
+          }
+        });
+      }
+
+      // ── Stub: replace with live Baserow fetch ──
+      // Example live call (uncomment and adapt):
+      //
+      // fetch('https://api.baserow.io/api/database/rows/table/YOUR_TABLE_ID/?user_field_names=true', {
+      //   headers: { 'Authorization': 'Token YOUR_BASEROW_TOKEN' }
+      // })
+      // .then(r => r.json())
+      // .then(json => {
+      //   const grouped = {};
+      //   json.results.forEach(row => {
+      //     grouped[row.city] = (grouped[row.city] || 0) + 1;
+      //   });
+      //   const sorted = Object.entries(grouped)
+      //     .map(([city, count]) => ({ city, count }))
+      //     .sort((a, b) => b.count - a.count)
+      //     .slice(0, 10); // 10 for mobile; desktop renders only the first 5 rows
+      //   renderLeaderboard(sorted);
+      // });
+
+      // Placeholder — rows show em-dashes until live data is wired
+      renderLeaderboard([]);
+    })();
+
+  </script>
+
+</body>
+</html>
