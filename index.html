@@ -173,15 +173,12 @@
       overflow: hidden;
     }
 
-    /* Subtle grid texture */
-    .hero::before {
-      content: '';
+    /* Pickleball court line background */
+    .hero .court-bg {
       position: absolute;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 48px 48px;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
     }
 
@@ -1112,6 +1109,16 @@
       color: rgba(255,255,255,0.8);
       padding-block-start: var(--space-lg);
       padding-block-end: var(--space-2xl);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer .court-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
     }
 
     /* Brand always sits full-width on top */
@@ -1538,7 +1545,7 @@
        ============================================================ */
 
     .founder-strip {
-      background: var(--color-accent-dark);
+      background: var(--color-accent);
       color: #fff;
       padding-block: var(--space-lg);       /* tighter than --space-xl */
     }
@@ -1739,6 +1746,71 @@
        SECTION 1 — HERO
        ============================================================ -->
   <section class="hero" aria-labelledby="hero-headline">
+
+    <!-- Staircase court pattern — gold lines, no fills (Option D color scheme)
+         delta=70: right kitchen edge of each row aligns with net of next row -->
+    <svg class="court-bg" viewBox="0 0 1100 500" preserveAspectRatio="xMidYMid slice"
+         xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <defs>
+        <radialGradient id="hero-vig" cx="50%" cy="50%" r="60%">
+          <stop offset="0%"   stop-color="#1A4A7A" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="#1A4A7A" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="hero-fl" x1="0%"   y1="0%" x2="18%"  y2="0%">
+          <stop offset="0%"   stop-color="#1A4A7A" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#1A4A7A" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="hero-fr" x1="100%" y1="0%" x2="82%"  y2="0%">
+          <stop offset="0%"   stop-color="#1A4A7A" stop-opacity="0.75"/>
+          <stop offset="100%" stop-color="#1A4A7A" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="hero-ft" x1="0%" y1="0%"   x2="0%" y2="16%">
+          <stop offset="0%"   stop-color="#1A4A7A" stop-opacity="0.85"/>
+          <stop offset="100%" stop-color="#1A4A7A" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="hero-fb" x1="0%" y1="100%" x2="0%" y2="84%">
+          <stop offset="0%"   stop-color="#1A4A7A" stop-opacity="0.85"/>
+          <stop offset="100%" stop-color="#1A4A7A" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <g id="hero-courts" transform="rotate(-12, 550, 250)"></g>
+      <rect width="1100" height="500" fill="url(#hero-fl)"/>
+      <rect width="1100" height="500" fill="url(#hero-fr)"/>
+      <rect width="1100" height="500" fill="url(#hero-ft)"/>
+      <rect width="1100" height="500" fill="url(#hero-fb)"/>
+      <rect width="1100" height="500" fill="url(#hero-vig)"/>
+    </svg>
+    <script>
+      (function() {
+        var LINE  = 'rgba(255,255,255,0.24)'; /* Option A: white lines, no fills */
+        var DELTA = 70, CW = 440, CH = 200;
+        var Y0 = -600, ROWS = 11, XMIN = -700, XMAX = 1800;
+        var out = '';
+        for (var r = 0; r <= ROWS; r++) {
+          var y = Y0 + r * CH;
+          out += '<line x1="'+XMIN+'" y1="'+y+'" x2="'+XMAX+'" y2="'+y+'" stroke="'+LINE+'" stroke-width="1.5"/>';
+        }
+        for (var r = 0; r < ROWS; r++) {
+          var yT = Y0 + r * CH, yB = yT + CH, yC = yT + CH/2;
+          var offset = r * DELTA;
+          var kMin = Math.ceil((XMIN - offset) / CW) - 1;
+          var kMax = Math.floor((XMAX - offset) / CW) + 1;
+          for (var k = kMin; k <= kMax; k++) {
+            var xb = offset + k * CW;
+            if (xb + CW < XMIN || xb > XMAX) continue;
+            var xN = xb+220, xL = xb+150, xR = xb+290;
+            out += '<line x1="'+xb+'" y1="'+yT+'" x2="'+xb+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="1.5"/>';
+            out += '<line x1="'+xN+'" y1="'+yT+'" x2="'+xN+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="2"/>';
+            out += '<line x1="'+xL+'" y1="'+yT+'" x2="'+xL+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="1.5"/>';
+            out += '<line x1="'+xR+'" y1="'+yT+'" x2="'+xR+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="1.5"/>';
+            out += '<line x1="'+xb+'" y1="'+yC+'" x2="'+xL+'" y2="'+yC+'" stroke="'+LINE+'" stroke-width="1"/>';
+            out += '<line x1="'+xR+'" y1="'+yC+'" x2="'+(xb+CW)+'" y2="'+yC+'" stroke="'+LINE+'" stroke-width="1"/>';
+          }
+        }
+        document.getElementById('hero-courts').innerHTML = out;
+      })();
+    </script>
+
     <div class="container hero__inner">
 
       <h1 class="hero__headline" id="hero-headline">
@@ -2275,6 +2347,70 @@
        SECTION 4 — FOOTER / MISSION + TRANSPARENCY
        ============================================================ -->
   <footer class="footer" role="contentinfo">
+
+    <!-- Staircase court pattern — half scale of hero (courts at 220×100px) so more rows
+         visible across the footer height. Alignment preserved: DELTA=35 keeps
+         kitchen right edge aligned with next row's net. -->
+    <svg class="court-bg" viewBox="0 0 1100 400" preserveAspectRatio="xMidYMid slice"
+         xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="foot-ft" x1="0%" y1="0%"   x2="0%" y2="100%">
+          <stop offset="0%"   stop-color="#112D4E" stop-opacity="0.85"/>
+          <stop offset="7%"   stop-color="#112D4E" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#112D4E" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="foot-fb" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%"   stop-color="#112D4E" stop-opacity="0.9"/>
+          <stop offset="10%"  stop-color="#112D4E" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#112D4E" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="foot-fl" x1="0%" y1="0%"   x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#112D4E" stop-opacity="0.9"/>
+          <stop offset="10%"  stop-color="#112D4E" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#112D4E" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="foot-fr" x1="100%" y1="0%" x2="0%"   y2="0%">
+          <stop offset="0%"   stop-color="#112D4E" stop-opacity="0.9"/>
+          <stop offset="10%"  stop-color="#112D4E" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#112D4E" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <g id="footer-courts" transform="rotate(-12, 550, 200)"></g>
+      <rect width="1100" height="400" fill="url(#foot-ft)"/>
+      <rect width="1100" height="400" fill="url(#foot-fb)"/>
+      <rect width="1100" height="400" fill="url(#foot-fl)"/>
+      <rect width="1100" height="400" fill="url(#foot-fr)"/>
+    </svg>
+    <script>
+      (function() {
+        var LINE  = 'rgba(255,255,255,0.08)';
+        var DELTA = 35, CW = 220, CH = 100;
+        var Y0 = -400, ROWS = 14, XMIN = -700, XMAX = 1800;
+        var out = '';
+        for (var r = 0; r <= ROWS; r++) {
+          var y = Y0 + r * CH;
+          out += '<line x1="'+XMIN+'" y1="'+y+'" x2="'+XMAX+'" y2="'+y+'" stroke="'+LINE+'" stroke-width="0.75"/>';
+        }
+        for (var r = 0; r < ROWS; r++) {
+          var yT = Y0 + r * CH, yB = yT + CH, yC = yT + CH/2;
+          var offset = r * DELTA;
+          var kMin = Math.ceil((XMIN - offset) / CW) - 1;
+          var kMax = Math.floor((XMAX - offset) / CW) + 1;
+          for (var k = kMin; k <= kMax; k++) {
+            var xb = offset + k * CW;
+            if (xb + CW < XMIN || xb > XMAX) continue;
+            var xN = xb+110, xL = xb+75, xR = xb+145;
+            out += '<line x1="'+xb+'" y1="'+yT+'" x2="'+xb+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="0.75"/>';
+            out += '<line x1="'+xN+'" y1="'+yT+'" x2="'+xN+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="1"/>';
+            out += '<line x1="'+xL+'" y1="'+yT+'" x2="'+xL+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="0.75"/>';
+            out += '<line x1="'+xR+'" y1="'+yT+'" x2="'+xR+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="0.75"/>';
+            out += '<line x1="'+xb+'" y1="'+yC+'" x2="'+xL+'" y2="'+yC+'" stroke="'+LINE+'" stroke-width="0.5"/>';
+            out += '<line x1="'+xR+'" y1="'+yC+'" x2="'+(xb+CW)+'" y2="'+yC+'" stroke="'+LINE+'" stroke-width="0.5"/>';
+          }
+        }
+        document.getElementById('footer-courts').innerHTML = out;
+      })();
+    </script>
     <div class="container">
 
       <!-- Brand — always full width on top -->
@@ -2297,8 +2433,8 @@
           <ul class="footer__links">
             <li><a href="#submit">Add Your Datapoint</a></li>
             <li><a href="mailto:contact@paddleclub.org">Contact Us</a></li>
-            <li><a href="privacy.html">Privacy Policy</a></li>
-            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="paddleclub-privacy-v1.0.html">Privacy Policy</a></li>
+            <li><a href="paddleclub-tos-v1.0.html">Terms of Service</a></li>
             <li><a href="mailto:troy@paddleclub.org?subject=Brand%20%26%20Retailer%20Partnership%20Inquiry&body=Hi%20Troy%2C%0A%0AI%27m%20interested%20in%20partnering%20with%20PaddleClub.%0A%0ACompany%3A%20%0AWebsite%3A%20%0AContact%20Name%3A%20%0A">Partner With Us (Brands &amp; Retailers)</a></li>
             <li><a href="mailto:troy@paddleclub.org?subject=Club%20%26%20Facility%20Partnership%20Inquiry&body=Hi%20Troy%2C%0A%0AI%27m%20interested%20in%20partnering%20with%20PaddleClub.%0A%0AClub%2FFacility%20Name%3A%20%0ALocation%3A%20%0AContact%20Name%3A%20%0A">Partner With Us (Clubs &amp; Facilities)</a></li>
           </ul>
