@@ -19,6 +19,9 @@
   <meta name="twitter:description" content="Help your city say yes to more courts. Add your pickleball spending datapoint." />
   <meta name="twitter:image"       content="https://paddleclub.org/og-image.png" />
 
+  <!-- Leaflet.js — community map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
   <!-- ============================================================
        FONTS
        ============================================================ -->
@@ -2106,21 +2109,8 @@
           </div>
         </div>
 
-        <!--
-          EMBED INSERTION POINT — Community Data
-          Replace the .embed-placeholder div with your Flourish or Looker Studio <iframe>.
-        -->
-        <div class="embed-placeholder" aria-label="Community data dashboard embed placeholder">
-          <svg class="embed-placeholder__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503-10.498l4.875 2.438a1.5 1.5 0 010 2.625l-4.875 2.437a1.5 1.5 0 01-2.006-1.413V7.664c0-.805.88-1.318 1.606-.912z" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-          </svg>
-          <h3 class="embed-placeholder__title">Community Impact Map</h3>
-          <p class="embed-placeholder__body">
-            Replace this block with your Flourish, Looker Studio, or custom visualization iframe. Pre-sized to 480px height and full width.
-          </p>
-          <code class="embed-placeholder__code">&lt;!-- INSERT EMBED IFRAME HERE --&gt;</code>
-        </div>
+        <!-- Community Impact Map — Leaflet.js, live from Baserow -->
+        <div id="community-map" aria-label="Community impact map" style="width:100%;height:480px;border-radius:8px;overflow:hidden;background:#e8edf2;"></div>
 
         <!-- Top 5 Cities leaderboard — wire to Baserow API -->
         <div class="zip-leaderboard" aria-label="Top 5 cities by datapoints">
@@ -2832,84 +2822,188 @@
 
 
     /* ----------------------------------------------------------
-       LIVE STATS + CITY LEADERBOARD — Baserow API
-       Table ID: 1003675
-       Fetches all rows, computes aggregates client-side.
+       STATS + LEADERBOARD + MAP — Stats table only (no PII)
+       Table 1003750 contains pre-aggregated data computed
+       server-side by Activepieces on every form submission.
     ---------------------------------------------------------- */
-    (function initBaserowStats() {
-      const TABLE_ID = '1003675';
-      const TOKEN    = 'sdThwvPqG0z94DQksclAUljZC25ifv8e';
+    (function initDashboard() {
+      const STATS_TABLE_ID = '1003750';
+      const TOKEN          = 'sdThwvPqG0z94DQksclAUljZC25ifv8e';
 
-      const datapointsEl  = document.getElementById('stat-datapoints');
-      const zipcodesEl    = document.getElementById('stat-zipcodes-dashboard');
-      const leaderList    = document.getElementById('zip-leaderboard-list');
+      const datapointsEl = document.getElementById('stat-datapoints');
+      const zipcodesEl   = document.getElementById('stat-zipcodes-dashboard');
+      const leaderList   = document.getElementById('zip-leaderboard-list');
 
-      /* Fetch all rows — paginated if needed */
-      async function fetchAllRows() {
-        let rows = [];
-        let url  = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/?user_field_names=true&size=200`;
-        while (url) {
-          const res  = await fetch(url, { headers: { 'Authorization': `Token ${TOKEN}` } });
-          if (!res.ok) throw new Error(`Baserow ${res.status}`);
-          const json = await res.json();
-          rows = rows.concat(json.results);
-          url  = json.next || null;
-        }
-        return rows;
+      /* Format leader count as obscured "40+" */
+      function fmtLeader(count) {
+        if (count < 10) return count + '+';
+        return (Math.floor(count / 10) * 10) + '+';
       }
 
-      /* Render the Top 5 Cities leaderboard */
-      function renderLeaderboard(data) {
-        if (!leaderList) return;
-        const rows     = leaderList.querySelectorAll('.zip-leaderboard__item');
-        const maxCount = data[0]?.count || 1;
+      /* Render Top 5 leaderboard — race leader gap format */
+      function renderLeaderboard(cities) {
+        if (!leaderList || !cities.length) return;
+        const rows        = leaderList.querySelectorAll('.zip-leaderboard__item');
+        const leaderCount = cities[0].count;
 
         rows.forEach((row, i) => {
-          const entry   = data[i];
+          const entry   = cities[i];
+          const rankEl  = row.querySelector('.zip-leaderboard__rank');
           const cityEl  = row.querySelector('[data-city]');
           const countEl = row.querySelector('[data-count]');
           const barEl   = row.querySelector('[data-bar]');
 
           if (entry) {
-            cityEl.textContent  = entry.city;
-            countEl.textContent = entry.count.toLocaleString() + ' pts';
+            const isLeader = (i === 0);
+            cityEl.textContent  = `${entry.city}, ${entry.state}`;
+            countEl.textContent = isLeader
+              ? fmtLeader(entry.count)
+              : '— ' + (leaderCount - entry.count);
+
             requestAnimationFrame(() => {
-              barEl.style.width = ((entry.count / maxCount) * 100) + '%';
+              barEl.style.width = ((entry.count / leaderCount) * 100) + '%';
             });
+
+            /* Gold treatment for #1 */
+            if (isLeader) {
+              if (rankEl)  rankEl.style.color  = 'var(--color-accent)';
+              cityEl.style.color               = 'var(--color-accent)';
+              countEl.style.color              = 'var(--color-accent)';
+              barEl.style.background           = 'var(--color-accent)';
+            }
           } else {
-            cityEl.textContent  = '—';
-            countEl.textContent = '—';
-            barEl.style.width   = '0%';
+            if (cityEl)  cityEl.textContent  = '—';
+            if (countEl) countEl.textContent = '—';
+            if (barEl)   barEl.style.width   = '0%';
           }
         });
       }
 
-      fetchAllRows().then(rows => {
-        /* Total datapoints */
-        if (datapointsEl) datapointsEl.textContent = rows.length.toLocaleString();
+      /* Single fetch of the Stats row — shared with map below */
+      async function fetchStats() {
+        const res  = await fetch(
+          `https://api.baserow.io/api/database/rows/table/${STATS_TABLE_ID}/?user_field_names=true&size=1`,
+          { headers: { 'Authorization': `Token ${TOKEN}` } }
+        );
+        if (!res.ok) throw new Error(`Stats ${res.status}`);
+        const json = await res.json();
+        const row  = json.results[0];
+        if (!row) throw new Error('No stats row');
+        return {
+          total_datapoints: row.total_datapoints || 0,
+          unique_zips:      row.unique_zips      || 0,
+          cities:           JSON.parse(row.city_counts || '[]'),
+        };
+      }
 
-        /* Unique ZIP codes */
-        const uniqueZips = new Set(rows.map(r => r.zip_code).filter(z => z && z.trim()));
-        if (zipcodesEl) zipcodesEl.textContent = uniqueZips.size.toLocaleString();
+      /* Shared promise — map reuses this instead of a second fetch */
+      window._pcStatsPromise = fetchStats().catch(err => {
+        console.warn('[PaddleClub] Stats fetch failed:', err);
+        return null;
+      });
 
-        /* Top 5 cities */
-        const cityMap = {};
-        rows.forEach(r => {
-          const city = (r.city || '').trim();
-          if (city) cityMap[city] = (cityMap[city] || 0) + 1;
-        });
-        const sorted = Object.entries(cityMap)
-          .map(([city, count]) => ({ city, count }))
-          .sort((a, b) => b.count - a.count)
-          .slice(0, 5);
-        renderLeaderboard(sorted);
-
-      }).catch(err => {
-        console.warn('[PaddleClub] Baserow stats fetch failed:', err);
-        /* Silently fail — stats stay at placeholder values */
+      window._pcStatsPromise.then(stats => {
+        if (!stats) return;
+        if (datapointsEl) datapointsEl.textContent = stats.total_datapoints.toLocaleString();
+        if (zipcodesEl)   zipcodesEl.textContent   = stats.unique_zips.toLocaleString();
+        renderLeaderboard(stats.cities.slice(0, 5));
       });
     })();
 
+  </script>
+
+  <!-- Leaflet.js library -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    /* ----------------------------------------------------------
+       COMMUNITY IMPACT MAP — Leaflet.js + Nominatim geocoding
+       Pulls submissions from Baserow, plots a dot per city.
+       Coordinates cached in localStorage to avoid repeat lookups.
+    ---------------------------------------------------------- */
+    (function initCommunityMap() {
+      const GEOCACHE_KEY = 'paddleclub_geocache_v1';
+
+      const mapEl = document.getElementById('community-map');
+      if (!mapEl || typeof L === 'undefined') return;
+
+      /* Load cached geocodes */
+      let geocache = {};
+      try { geocache = JSON.parse(localStorage.getItem(GEOCACHE_KEY) || '{}'); } catch(e) {}
+
+      /* Init map — US center, scroll zoom off for better UX */
+      const map = L.map('community-map', {
+        center: [39.5, -98.35],
+        zoom: 4,
+        scrollWheelZoom: false,
+        zoomControl: true,
+      });
+
+      /* CartoDB Positron tiles — free, clean, civic aesthetic */
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19,
+      }).addTo(map);
+
+      const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+      /* Geocode city+state via Nominatim (free, no key needed) */
+      async function geocode(city, state) {
+        const key = `${city}|${state}`;
+        if (geocache[key]) return geocache[key];
+
+        const url = `https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}&country=US&format=json&limit=1`;
+        try {
+          const res  = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+          const data = await res.json();
+          if (data && data[0]) {
+            const coords = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+            geocache[key] = coords;
+            try { localStorage.setItem(GEOCACHE_KEY, JSON.stringify(geocache)); } catch(e) {}
+            return coords;
+          }
+        } catch(e) { /* silent */ }
+        return null;
+      }
+
+      async function loadMap() {
+        /* Use shared stats promise — no raw Submissions access */
+        const stats = await window._pcStatsPromise;
+        if (!stats || !stats.cities.length) return;
+
+        const cities   = stats.cities;
+        const maxCount = Math.max(...cities.map(c => c.count), 1);
+
+        /* Geocode and plot each city */
+        for (const entry of cities) {
+          const coords = await geocode(entry.city, entry.state);
+          if (!coords) { await sleep(1100); continue; }
+
+          /* Radius 8–30px scaled to submission count */
+          const radius = 8 + Math.round((entry.count / maxCount) * 22);
+
+          L.circleMarker([coords.lat, coords.lng], {
+            radius,
+            fillColor:   '#C4902A',
+            color:       '#ffffff',
+            weight:      2,
+            opacity:     1,
+            fillOpacity: 0.85,
+          })
+          .bindPopup(
+            `<strong>${entry.city}, ${entry.state}</strong><br>` +
+            `${entry.count} datapoint${entry.count !== 1 ? 's' : ''}`
+          )
+          .addTo(map);
+
+          /* Nominatim rate limit: 1 request per second */
+          await sleep(1100);
+        }
+      }
+
+      loadMap().catch(err => console.warn('[PaddleClub] Map load failed:', err));
+    })();
   </script>
 
   <!-- ============================================================
