@@ -2616,6 +2616,33 @@
       };
     })();
 
+    /* ----------------------------------------------------------
+       FIELD MEMORY — name, city, state, zip_code
+       Pre-fills on return visits; saves on successful submission.
+    ---------------------------------------------------------- */
+    (function initFieldMemory() {
+      const FIELDS = ['name', 'city', 'state', 'zip_code'];
+
+      // Pre-fill saved values on page load
+      FIELDS.forEach(name => {
+        const saved = localStorage.getItem('paddleclub_' + name);
+        const el    = document.getElementById('field-' + name);
+        if (saved && el) el.value = saved;
+      });
+
+      // Expose save function for the form handler
+      window._pcFields = {
+        save(form) {
+          FIELDS.forEach(name => {
+            const el = form[name];
+            if (el && el.value.trim()) {
+              localStorage.setItem('paddleclub_' + name, el.value.trim());
+            }
+          });
+        }
+      };
+    })();
+
 
     /* ----------------------------------------------------------
        INSTAGRAM CARD: Hide placeholder once real image src is set
@@ -2722,6 +2749,7 @@
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
           const emailVal = form['email'].value.trim();
+          if (window._pcFields) window._pcFields.save(form);
           showFeedback('success');
           form.reset();
           if (window._pcEmail) window._pcEmail.save(emailVal);
