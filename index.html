@@ -1563,7 +1563,8 @@
     .founder-strip {
       background: var(--color-accent);
       color: #fff;
-      padding-block: var(--space-lg);       /* tighter than --space-xl */
+      padding-top: var(--space-sm);
+      padding-bottom: var(--space-md);
     }
 
     .founder-strip__inner {
@@ -1805,6 +1806,17 @@
       color: var(--color-accent);
     }
 
+    .email-chooser__option--default {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    .email-chooser__option--default:hover {
+      background: var(--color-accent);
+      color: #ffffff;
+    }
+
     .email-chooser__cancel {
       width: 100%;
       padding: 0.6rem;
@@ -2041,7 +2053,7 @@
           <div class="ig-card__body">
             <div class="ig-card__meta">
               <p class="ig-card__caption">
-                After the LA fires, I set out to get every LA firefighter a paddle in thanks, then I found out there's almost 9,000... So I need your extras.
+                After the LA fires, I set out to get every LA firefighter a paddle in thanks, then I found out there's almost 9,000... so I need your extras.
               </p>
             </div>
             <span class="btn btn--solid" style="flex-shrink:0;">View on Instagram ↗</span>
@@ -2109,8 +2121,8 @@
           </div>
         </div>
 
-        <!-- Community Impact Map — Leaflet.js, live from Baserow -->
-        <div id="community-map" aria-label="Community impact map" style="width:100%;height:480px;border-radius:8px;overflow:hidden;background:#e8edf2;"></div>
+        <!-- Community Impact Map — hidden until ready to launch -->
+        <div id="community-map" aria-label="Community impact map" style="display:none;width:100%;height:480px;border-radius:8px;overflow:hidden;background:#e8edf2;"></div>
 
         <!-- Top 5 Cities leaderboard — wire to Baserow API -->
         <div class="zip-leaderboard" aria-label="Top 5 cities by datapoints">
@@ -2611,22 +2623,28 @@
        Pre-fills on return visits; saves on successful submission.
     ---------------------------------------------------------- */
     (function initFieldMemory() {
-      const FIELDS = ['name', 'city', 'state', 'zip_code'];
+      // Map: localStorage key → { formName, elementId }
+      const FIELDS = [
+        { key: 'name',     formName: 'name',     id: 'field-name'  },
+        { key: 'city',     formName: 'city',     id: 'field-city'  },
+        { key: 'state',    formName: 'state',    id: 'field-state' },
+        { key: 'zip_code', formName: 'zip_code', id: 'field-zip'   },
+      ];
 
       // Pre-fill saved values on page load
-      FIELDS.forEach(name => {
-        const saved = localStorage.getItem('paddleclub_' + name);
-        const el    = document.getElementById('field-' + name);
+      FIELDS.forEach(f => {
+        const saved = localStorage.getItem('paddleclub_' + f.key);
+        const el    = document.getElementById(f.id);
         if (saved && el) el.value = saved;
       });
 
       // Expose save function for the form handler
       window._pcFields = {
         save(form) {
-          FIELDS.forEach(name => {
-            const el = form[name];
+          FIELDS.forEach(f => {
+            const el = form[f.formName];
             if (el && el.value.trim()) {
-              localStorage.setItem('paddleclub_' + name, el.value.trim());
+              localStorage.setItem('paddleclub_' + f.key, el.value.trim());
             }
           });
         }
@@ -2834,43 +2852,24 @@
       const zipcodesEl   = document.getElementById('stat-zipcodes-dashboard');
       const leaderList   = document.getElementById('zip-leaderboard-list');
 
-      /* Format leader count as obscured "40+" */
-      function fmtLeader(count) {
-        if (count < 10) return count + '+';
-        return (Math.floor(count / 10) * 10) + '+';
-      }
-
-      /* Render Top 5 leaderboard — race leader gap format */
+      /* Render Top 5 leaderboard — plain datapoint counts */
       function renderLeaderboard(cities) {
         if (!leaderList || !cities.length) return;
-        const rows        = leaderList.querySelectorAll('.zip-leaderboard__item');
-        const leaderCount = cities[0].count;
+        const rows     = leaderList.querySelectorAll('.zip-leaderboard__item');
+        const maxCount = cities[0].count;
 
         rows.forEach((row, i) => {
           const entry   = cities[i];
-          const rankEl  = row.querySelector('.zip-leaderboard__rank');
           const cityEl  = row.querySelector('[data-city]');
           const countEl = row.querySelector('[data-count]');
           const barEl   = row.querySelector('[data-bar]');
 
           if (entry) {
-            const isLeader = (i === 0);
             cityEl.textContent  = `${entry.city}, ${entry.state}`;
-            countEl.textContent = isLeader
-              ? fmtLeader(entry.count)
-              : '— ' + (leaderCount - entry.count);
-
+            countEl.textContent = entry.count + ' pts';
             requestAnimationFrame(() => {
-              barEl.style.width = ((entry.count / leaderCount) * 100) + '%';
+              barEl.style.width = ((entry.count / maxCount) * 100) + '%';
             });
-
-            /* Gold treatment for #1 */
-            if (isLeader) {
-              if (rankEl)  rankEl.style.color  = 'var(--color-accent)';
-              cityEl.style.color               = 'var(--color-accent)';
-              countEl.style.color              = 'var(--color-accent)';
-              barEl.style.background           = 'var(--color-accent)';
-            }
           } else {
             if (cityEl)  cityEl.textContent  = '—';
             if (countEl) countEl.textContent = '—';
@@ -3024,66 +3023,75 @@
       var options  = document.getElementById('email-chooser-options');
       var backdrop = document.getElementById('email-chooser-backdrop');
       var cancel   = document.getElementById('email-chooser-cancel');
+      var PREF_KEY = 'paddleclub_email_provider';
 
-      /* Parse a mailto: href into { to, subject, body } */
       function parseMailto(href) {
-        var match   = href.match(/^mailto:([^?]+)(\?(.*))?$/i);
-        var to      = match ? decodeURIComponent(match[1]) : '';
-        var params  = new URLSearchParams(match && match[3] ? match[3] : '');
-        return {
-          to:      to,
-          subject: params.get('subject') || '',
-          body:    params.get('body')    || ''
-        };
+        var match  = href.match(/^mailto:([^?]+)(\?(.*))?$/i);
+        var to     = match ? decodeURIComponent(match[1]) : '';
+        var params = new URLSearchParams(match && match[3] ? match[3] : '');
+        return { to: to, subject: params.get('subject') || '', body: params.get('body') || '' };
       }
 
-      /* Build provider option HTML for a given parsed mailto */
-      function buildOptions(parsed) {
-        var t = encodeURIComponent(parsed.to);
-        var s = encodeURIComponent(parsed.subject);
-        var b = encodeURIComponent(parsed.body);
-
-        var providers = [
-          { name: 'Gmail',
-            url: 'https://mail.google.com/mail/?view=cm&fs=1&to='+t+'&su='+s+'&body='+b },
-          { name: 'Outlook',
-            url: 'https://outlook.live.com/mail/deeplink/compose?to='+t+'&subject='+s+'&body='+b },
-          { name: 'Yahoo Mail',
-            url: 'https://compose.mail.yahoo.com/?to='+t+'&subject='+s+'&body='+b },
-          { name: 'Default Mail App',
-            url: 'mailto:'+parsed.to+(parsed.subject?'?subject='+encodeURIComponent(parsed.subject):'')+(parsed.body?(parsed.subject?'&':'?')+'body='+encodeURIComponent(parsed.body):''),
-            isMailto: true }
+      function getProviders(parsed) {
+        var t  = encodeURIComponent(parsed.to);
+        var s  = encodeURIComponent(parsed.subject);
+        var b  = encodeURIComponent(parsed.body);
+        var ml = 'mailto:' + parsed.to
+          + (parsed.subject ? '?subject=' + encodeURIComponent(parsed.subject) : '')
+          + (parsed.body ? (parsed.subject ? '&' : '?') + 'body=' + encodeURIComponent(parsed.body) : '');
+        return [
+          { name: 'Gmail',     url: 'https://mail.google.com/mail/?view=cm&fs=1&to='+t+'&su='+s+'&body='+b },
+          { name: 'Outlook',   url: 'https://outlook.live.com/mail/deeplink/compose?to='+t+'&subject='+s+'&body='+b },
+          { name: 'Yahoo Mail',url: 'https://compose.mail.yahoo.com/?to='+t+'&subject='+s+'&body='+b },
+          { name: 'Default Mail App', url: ml, isMailto: true, isDefault: true },
         ];
+      }
 
-        return providers.map(function(p) {
-          return '<a class="email-chooser__option" href="'+p.url+'"'
-               + (p.isMailto ? '' : ' target="_blank" rel="noopener noreferrer"')
-               + '>'+p.name+'</a>';
-        }).join('');
+      function navigateTo(name, url, isMailto) {
+        localStorage.setItem(PREF_KEY, name);
+        close();
+        if (isMailto) { window.location.href = url; }
+        else { window.open(url, '_blank', 'noopener,noreferrer'); }
       }
 
       function open(href) {
-        options.innerHTML = buildOptions(parseMailto(href));
+        var parsed    = parseMailto(href);
+        var providers = getProviders(parsed);
+        options.innerHTML = providers.map(function(p) {
+          var cls = 'email-chooser__option' + (p.isDefault ? ' email-chooser__option--default' : '');
+          return '<a class="'+cls+'" href="'+p.url+'"'
+               + (p.isMailto ? '' : ' target="_blank" rel="noopener noreferrer"')
+               + ' data-name="'+p.name+'" data-mailto="'+(p.isMailto?'1':'0')+'">'+p.name+'</a>';
+        }).join('');
+
+        options.querySelectorAll('.email-chooser__option').forEach(function(a) {
+          a.addEventListener('click', function(e) {
+            e.preventDefault();
+            navigateTo(this.dataset.name, this.getAttribute('href'), this.dataset.mailto === '1');
+          });
+        });
+
         chooser.classList.add('email-chooser--open');
       }
 
-      function close() {
-        chooser.classList.remove('email-chooser--open');
-      }
+      function close() { chooser.classList.remove('email-chooser--open'); }
 
-      /* Intercept all mailto links */
       document.querySelectorAll('a[href^="mailto:"]').forEach(function(link) {
         link.addEventListener('click', function(e) {
           e.preventDefault();
-          open(this.getAttribute('href'));
+          var href      = this.getAttribute('href');
+          var savedPref = localStorage.getItem(PREF_KEY);
+          if (savedPref) {
+            var p = getProviders(parseMailto(href)).find(function(pr) { return pr.name === savedPref; });
+            if (p) { navigateTo(p.name, p.url, !!p.isMailto); return; }
+          }
+          open(href);
         });
       });
 
       backdrop.addEventListener('click', close);
       cancel.addEventListener('click', close);
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') close();
-      });
+      document.addEventListener('keydown', function(e) { if (e.key === 'Escape') close(); });
     })();
   </script>
 
