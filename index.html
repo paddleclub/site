@@ -7,6 +7,19 @@
   <meta name="description" content="Quantifying the economic impact of pickleball to drive infrastructure investment in your community." />
 
   <!-- ============================================================
+       OG / SOCIAL META TAGS
+       ============================================================ -->
+  <meta property="og:type"         content="website" />
+  <meta property="og:url"          content="https://paddleclub.org/" />
+  <meta property="og:title"        content="PaddleClub — Civic Advocacy for Pickleball Infrastructure" />
+  <meta property="og:description"  content="Quantifying the economic impact of pickleball to drive infrastructure investment in your community. Add your datapoint." />
+  <meta property="og:image"        content="https://paddleclub.org/og-image.png" />
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="PaddleClub — Civic Advocacy for Pickleball Infrastructure" />
+  <meta name="twitter:description" content="Help your city say yes to more courts. Add your pickleball spending datapoint." />
+  <meta name="twitter:image"       content="https://paddleclub.org/og-image.png" />
+
+  <!-- ============================================================
        FONTS
        ============================================================ -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -2270,7 +2283,7 @@
         <form
           id="paddleclub-form"
           novalidate
-          data-action="https://YOUR_ACTIVEPIECES_WEBHOOK_URL_HERE"
+          data-action="https://cloud.activepieces.com/api/v1/webhooks/2VEDzplmwbRphv2SPklZU"
         >
 
           <!-- Email -->
@@ -2697,12 +2710,13 @@
         /* Live submission */
         setLoading(true);
         try {
-          const payload = new FormData(form);
+          /* Convert form to JSON — more reliable with Activepieces webhook parsing */
+          const payload = Object.fromEntries(new FormData(form).entries());
 
           const response = await fetch(webhookUrl, {
             method: 'POST',
-            body: payload,
-            /* Do NOT set Content-Type — browser sets multipart boundary automatically */
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
           });
 
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -2790,96 +2804,82 @@
 
 
     /* ----------------------------------------------------------
-       STATS PLACEHOLDER
-       Wire this to your Baserow API to pull live aggregate counts.
-       Replace each assignment with a fetch() to your Baserow view.
-
-       Example endpoint:
-         GET https://api.baserow.io/api/database/rows/table/YOUR_TABLE_ID/
-             ?user_field_names=true&search=&filter__field_xxx__xxx=
+       LIVE STATS + CITY LEADERBOARD — Baserow API
+       Table ID: 1003675
+       Fetches all rows, computes aggregates client-side.
     ---------------------------------------------------------- */
-    (function initStats() {
-      // Placeholder values — replace with live Baserow API calls
-      const stats = {
-        'stat-datapoints':        '—',  // e.g. '1,248'
-        'stat-zipcodes-dashboard':'—',  // e.g. '64'
-      };
+    (function initBaserowStats() {
+      const TABLE_ID = '1003675';
+      const TOKEN    = 'sdThwvPqG0z94DQksclAUljZC25ifv8e';
 
-      Object.entries(stats).forEach(([id, value]) => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = value;
-      });
-    })();
+      const datapointsEl  = document.getElementById('stat-datapoints');
+      const zipcodesEl    = document.getElementById('stat-zipcodes-dashboard');
+      const leaderList    = document.getElementById('zip-leaderboard-list');
 
+      /* Fetch all rows — paginated if needed */
+      async function fetchAllRows() {
+        let rows = [];
+        let url  = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/?user_field_names=true&size=200`;
+        while (url) {
+          const res  = await fetch(url, { headers: { 'Authorization': `Token ${TOKEN}` } });
+          if (!res.ok) throw new Error(`Baserow ${res.status}`);
+          const json = await res.json();
+          rows = rows.concat(json.results);
+          url  = json.next || null;
+        }
+        return rows;
+      }
 
-    /* ----------------------------------------------------------
-       ZIP CODE LEADERBOARD
-       Wire this to Baserow: query your submissions table,
-       group by zip_code, COUNT(*) DESC, LIMIT 5.
-
-       Example Baserow aggregation endpoint:
-         GET https://api.baserow.io/api/database/rows/table/TABLE_ID/
-             ?user_field_names=true
-             &view_id=VIEW_ID_WITH_GROUPED_ZIP
-             (or use a formula field / Baserow view for pre-grouped data)
-
-       Expected data shape:
-         [ { city: 'Austin', count: 47 }, { city: 'Denver', count: 38 }, … ]
-    ---------------------------------------------------------- */
-    (function initZipLeaderboard() {
-      const list = document.getElementById('zip-leaderboard-list');
-      if (!list) return;
-
-      /**
-       * Populate leaderboard rows.
-       * @param {Array<{city: string, count: number}>} data — sorted descending by count
-       */
+      /* Render the Top 5 Cities leaderboard */
       function renderLeaderboard(data) {
-        const rows     = list.querySelectorAll('.zip-leaderboard__item');
+        if (!leaderList) return;
+        const rows     = leaderList.querySelectorAll('.zip-leaderboard__item');
         const maxCount = data[0]?.count || 1;
 
         rows.forEach((row, i) => {
-          const entry    = data[i];
-          const cityEl   = row.querySelector('[data-city]');
-          const countEl  = row.querySelector('[data-count]');
-          const barEl    = row.querySelector('[data-bar]');
+          const entry   = data[i];
+          const cityEl  = row.querySelector('[data-city]');
+          const countEl = row.querySelector('[data-count]');
+          const barEl   = row.querySelector('[data-bar]');
 
           if (entry) {
             cityEl.textContent  = entry.city;
             countEl.textContent = entry.count.toLocaleString() + ' pts';
-            // Animate bar width proportional to leader
             requestAnimationFrame(() => {
               barEl.style.width = ((entry.count / maxCount) * 100) + '%';
             });
           } else {
-            zipEl.textContent   = '—';
+            cityEl.textContent  = '—';
             countEl.textContent = '—';
             barEl.style.width   = '0%';
           }
         });
       }
 
-      // ── Stub: replace with live Baserow fetch ──
-      // Example live call (uncomment and adapt):
-      //
-      // fetch('https://api.baserow.io/api/database/rows/table/YOUR_TABLE_ID/?user_field_names=true', {
-      //   headers: { 'Authorization': 'Token YOUR_BASEROW_TOKEN' }
-      // })
-      // .then(r => r.json())
-      // .then(json => {
-      //   const grouped = {};
-      //   json.results.forEach(row => {
-      //     grouped[row.city] = (grouped[row.city] || 0) + 1;
-      //   });
-      //   const sorted = Object.entries(grouped)
-      //     .map(([city, count]) => ({ city, count }))
-      //     .sort((a, b) => b.count - a.count)
-      //     .slice(0, 10); // 10 for mobile; desktop renders only the first 5 rows
-      //   renderLeaderboard(sorted);
-      // });
+      fetchAllRows().then(rows => {
+        /* Total datapoints */
+        if (datapointsEl) datapointsEl.textContent = rows.length.toLocaleString();
 
-      // Placeholder — rows show em-dashes until live data is wired
-      renderLeaderboard([]);
+        /* Unique ZIP codes */
+        const uniqueZips = new Set(rows.map(r => r.zip_code).filter(z => z && z.trim()));
+        if (zipcodesEl) zipcodesEl.textContent = uniqueZips.size.toLocaleString();
+
+        /* Top 5 cities */
+        const cityMap = {};
+        rows.forEach(r => {
+          const city = (r.city || '').trim();
+          if (city) cityMap[city] = (cityMap[city] || 0) + 1;
+        });
+        const sorted = Object.entries(cityMap)
+          .map(([city, count]) => ({ city, count }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 5);
+        renderLeaderboard(sorted);
+
+      }).catch(err => {
+        console.warn('[PaddleClub] Baserow stats fetch failed:', err);
+        /* Silently fail — stats stay at placeholder values */
+      });
     })();
 
   </script>
