@@ -2879,9 +2879,48 @@
       const STATS_TABLE_ID = '1003750';
       const TOKEN          = 'sdThwvPqG0z94DQksclAUljZC25ifv8e';
 
+      /* ----------------------------------------------------------
+         SECTION VISIBILITY — flip a flag to false to hide it.
+         Public page only; no backend/data change needed.
+           datapoints  → the "Total Datapoints" stat card
+           zipCodes    → the "ZIP Codes" stat card
+           cityCounts  → the "X pts" numbers on each leaderboard
+                         row (city names + bars always stay visible)
+      ---------------------------------------------------------- */
+      const DASHBOARD_SECTIONS = {
+        datapoints: true,
+        zipCodes:   true,
+        cityCounts: true,
+      };
+
       const datapointsEl = document.getElementById('stat-datapoints');
       const zipcodesEl   = document.getElementById('stat-zipcodes-dashboard');
       const leaderList   = document.getElementById('zip-leaderboard-list');
+
+      /* Apply the DASHBOARD_SECTIONS flags above to the DOM. */
+      function applySectionVisibility() {
+        if (!DASHBOARD_SECTIONS.datapoints && datapointsEl) {
+          const card = datapointsEl.closest('.impact-stat');
+          if (card) card.style.display = 'none';
+        }
+        if (!DASHBOARD_SECTIONS.zipCodes && zipcodesEl) {
+          const card = zipcodesEl.closest('.impact-stat');
+          if (card) card.style.display = 'none';
+        }
+        /* Collapse the whole stat tray if both stats are hidden. */
+        if (!DASHBOARD_SECTIONS.datapoints && !DASHBOARD_SECTIONS.zipCodes) {
+          const anchor = datapointsEl || zipcodesEl;
+          const tray   = anchor && anchor.closest('.impact-stats');
+          if (tray) tray.style.display = 'none';
+        }
+        /* Hide only the per-city count numbers; bars + names remain. */
+        if (!DASHBOARD_SECTIONS.cityCounts && leaderList) {
+          leaderList.querySelectorAll('[data-count]').forEach(el => {
+            el.style.display = 'none';
+          });
+        }
+      }
+      applySectionVisibility();
 
       /* Render Top 5 leaderboard — plain datapoint counts */
       function renderLeaderboard(cities) {
