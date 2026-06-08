@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Confirm your datapoint · PaddleClub</title>
+  <style>
+    :root {
+      --navy: #112D4E;
+      --blue: #3F72AF;
+      --light: #DBE2EF;
+      --bg: #F9F7F7;
+      --text: #1b2a3a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .card {
+      background: #fff;
+      max-width: 460px;
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(17, 45, 78, 0.12);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      border-top: 5px solid var(--blue);
+    }
+    .brand { color: var(--navy); font-weight: 800; letter-spacing: 0.5px; font-size: 0.95rem; text-transform: uppercase; }
+    h1 { color: var(--navy); font-size: 1.5rem; margin: 0.75rem 0 0.5rem; }
+    p { line-height: 1.55; color: #41546a; margin: 0.5rem 0 1.5rem; }
+    button {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.85rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.05s;
+      width: 100%;
+    }
+    button:hover:not(:disabled) { background: var(--navy); }
+    button:active { transform: translateY(1px); }
+    button:disabled { opacity: 0.6; cursor: default; }
+    .muted { font-size: 0.85rem; color: #7c8aa0; margin-top: 1.25rem; }
+    .hidden { display: none; }
+    .success-mark { font-size: 2.5rem; }
+    a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">PaddleClub</div>
+
+    <!-- Default: prompt to confirm -->
+    <div id="prompt">
+      <h1>Confirm your datapoint</h1>
+      <p>One click verifies it's really you and moves your datapoint into our <strong>verified</strong> count, the number we put in front of city councils.</p>
+      <button id="confirm-btn" type="button">Confirm my datapoint</button>
+      <p class="muted">Didn't submit anything to PaddleClub? You can safely close this page.</p>
+    </div>
+
+    <!-- Success -->
+    <div id="success" class="hidden">
+      <div class="success-mark">✅</div>
+      <h1>You're verified!</h1>
+      <p>Thank you. Your datapoint now counts toward the verified total. That's the number that helps cities say yes to more courts.</p>
+      <p class="muted"><a href="https://paddleclub.org">Back to PaddleClub →</a></p>
+    </div>
+
+    <!-- Error / invalid -->
+    <div id="error" class="hidden">
+      <h1>Something went wrong</h1>
+      <p id="error-text">This confirmation link looks invalid or expired. If you just submitted, try clicking the button in your email again.</p>
+      <p class="muted"><a href="https://paddleclub.org">Back to PaddleClub →</a></p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      /* Filled in once the Activepieces confirm flow is built */
+      var CONFIRM_URL = 'https://cloud.activepieces.com/api/v1/webhooks/H65V7JsKfx6SztXQTgdYQ';
+      var AUTH_KEY    = '79385cc3ac101c8dd203a3c62a1ab1f72b127b67e986eceb';
+
+      var params = new URLSearchParams(window.location.search);
+      var token  = params.get('token');
+
+      var promptEl  = document.getElementById('prompt');
+      var successEl = document.getElementById('success');
+      var errorEl   = document.getElementById('error');
+      var btn       = document.getElementById('confirm-btn');
+
+      function show(el) {
+        promptEl.classList.add('hidden');
+        successEl.classList.add('hidden');
+        errorEl.classList.add('hidden');
+        el.classList.remove('hidden');
+      }
+
+      if (!token) { show(errorEl); return; }
+
+      btn.addEventListener('click', async function () {
+        btn.disabled = true;
+        btn.textContent = 'Confirming…';
+
+        if (CONFIRM_URL.indexOf('TBD') !== -1) {
+          console.log('[PaddleClub] Confirm URL not configured. Token:', token);
+          show(successEl);
+          return;
+        }
+        try {
+          var res = await fetch(CONFIRM_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-paddleclub-key': AUTH_KEY },
+            body: JSON.stringify({ token: token })
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          show(successEl);
+        } catch (err) {
+          console.error('[PaddleClub] Confirm error:', err);
+          show(errorEl);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

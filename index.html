@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PaddleClub — Pickleball for All</title>
-  <meta name="description" content="Quantifying the economic impact of pickleball to drive infrastructure investment in your community." />
+  <meta name="description" content="Documenting where, how often, and how many people play pickleball, to drive court investment in your community." />
 
   <!-- ============================================================
        OG / SOCIAL META TAGS
@@ -12,11 +12,11 @@
   <meta property="og:type"         content="website" />
   <meta property="og:url"          content="https://paddleclub.org/" />
   <meta property="og:title"        content="PaddleClub — Pickleball for All" />
-  <meta property="og:description"  content="Quantifying the economic impact of pickleball to drive infrastructure investment in your community. Add your datapoint." />
+  <meta property="og:description"  content="Documenting where, how often, and how many people play pickleball, to drive court investment in your community. Add your datapoint." />
   <meta property="og:image"        content="https://paddleclub.org/og-image.png" />
   <meta name="twitter:card"        content="summary_large_image" />
   <meta name="twitter:title"       content="PaddleClub — Pickleball for All" />
-  <meta name="twitter:description" content="Help your city say yes to more courts. Add your pickleball spending datapoint." />
+  <meta name="twitter:description" content="Help your city say yes to more courts. Add your pickleball datapoint." />
   <meta name="twitter:image"       content="https://paddleclub.org/og-image.png" />
 
   <!-- Leaflet.js — community map -->
@@ -457,10 +457,10 @@
 
     .form-group:last-of-type { margin-bottom: 0; }
 
-    /* Always two columns — only used for ZIP + State */
+    /* Stacks to one column on mobile; two columns on desktop (see min-width:481px below) */
     .form-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 0.375rem;
       margin-bottom: 0.375rem;
     }
@@ -1603,6 +1603,15 @@
     /* ============================================================
        IG + DONATION HUB GRID — side by side on desktop
        ============================================================ */
+    /* ============================================================
+       TOGGLE: Instagram + Firefighter Drive section
+       Switch "block" to "none" below to hide the whole section sitewide.
+       ============================================================ */
+    #ig-section { display: block; }
+
+    /* TOGGLE: Instagram caption text — switch "none" to "block" to show it */
+    #ig-caption { display: none; }
+
     .ig-hub-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -1833,6 +1842,9 @@
     .email-chooser__cancel:hover { color: var(--color-text); }
 
   </style>
+
+  <!-- Cloudflare Turnstile (bot/human check on the intake form) -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 
 <body>
@@ -2010,7 +2022,10 @@
 
         <!--
           INSTAGRAM FEATURE CARD + DONATION HUB — side by side on desktop
+          SHOW/HIDE: this whole block is wrapped in <div id="ig-section">.
+          To hide it sitewide, find "TOGGLE: Instagram" in the CSS and switch block -> none.
         -->
+        <div id="ig-section">
         <div class="ig-hub-grid">
 
         <a
@@ -2051,7 +2066,7 @@
 
           <div class="ig-card__body">
             <div class="ig-card__meta">
-              <p class="ig-card__caption">
+              <p class="ig-card__caption" id="ig-caption">
                 After the LA fires, I set out to get every LA firefighter a paddle in thanks, then I found out there's almost 9,000... so I need your extras.
               </p>
             </div>
@@ -2097,6 +2112,7 @@
         </div><!-- /.ig-hub-right -->
 
         </div><!-- /.ig-hub-grid -->
+        </div><!-- /#ig-section -->
 
       </div>
 
@@ -2262,7 +2278,7 @@
           Each submission adds leverage with your city.
         </h2>
         <p class="section-body">
-          City councils respond to data, not petitions. We turn what players actually spend into a dollar figure your city can't ignore. Your submission is part of that number.
+          On our own, we don't move city councils. Documented, we do: where, how often, and how many of us play. Add yours to the count.
         </p>
         <ul class="form-section__checklist" aria-label="What we do with your data">
           <li>Never sold to third parties</li>
@@ -2281,163 +2297,138 @@
           • data-action attribute — replace with your Activepieces webhook URL
           • File is submitted as FormData (multipart/form-data)
         -->
-        <form
-          id="paddleclub-form"
-          novalidate
-          data-action="https://cloud.activepieces.com/api/v1/webhooks/2VEDzplmwbRphv2SPklZU"
-        >
+                <form id="paddleclub-form" novalidate>
 
-          <!-- Email -->
-          <div class="form-group">
-            <label for="field-email">
-              Email <span class="required" aria-label="required">*</span>
-            </label>
-            <input
-              type="email"
-              id="field-email"
-              name="email"
-              autocomplete="email"
-              placeholder="jane@example.com"
-              required
-            />
-            <span class="form-hint" id="email-hint">For campaign updates in your area.</span>
-          </div>
+          <!-- ================= STEP 1 — minimal, always visible ================= -->
+          <div id="form-step-1">
 
-          <!-- Name + City (side by side) -->
-          <div class="form-row">
+            <!-- Email -->
             <div class="form-group">
-              <label for="field-name">Name</label>
-              <input
-                type="text"
-                id="field-name"
-                name="name"
-                autocomplete="name"
-                placeholder="Jane Smith"
-              />
-            </div>
-            <div class="form-group">
-              <label for="field-city">
-                Your City <span class="required" aria-label="required">*</span>
+              <label for="field-email">
+                Email <span class="required" aria-label="required">*</span>
               </label>
               <input
-                type="text"
-                id="field-city"
-                name="city"
-                autocomplete="address-level2"
-                placeholder="e.g. Austin"
+                type="email"
+                id="field-email"
+                name="email"
+                autocomplete="email"
+                placeholder="jane@example.com"
                 required
               />
+              <span class="form-hint" id="email-hint">Confirms you're real, and lets me keep you updated on what I'm doing. Unsubscribe anytime.</span>
             </div>
-          </div>
 
-          <!-- Amount + Purpose (side by side) -->
-          <div class="form-row">
-            <div class="form-group">
-              <label for="field-amount">
-                Amount <span class="required" aria-label="required">*</span>
-              </label>
-              <div class="input-currency">
-                <span class="input-currency__symbol" aria-hidden="true">$</span>
+            <!-- ZIP + Usual frequency (side by side) -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="field-zip">
+                  ZIP Code <span class="required" aria-label="required">*</span>
+                </label>
                 <input
-                  type="number"
-                  id="field-amount"
-                  name="amount"
-                  min="0.01"
-                  step="0.01"
-                  placeholder="0.00"
+                  type="text"
+                  id="field-zip"
+                  name="zip_code"
+                  autocomplete="postal-code"
+                  placeholder="e.g. 90210"
+                  maxlength="10"
+                  pattern="[0-9]{5}(-[0-9]{4})?"
                   required
                 />
+                <span class="form-hint">Shows your city council their voters want more courts.</span>
+              </div>
+              <div class="form-group">
+                <label for="field-frequency">
+                  Usual frequency of play <span class="required" aria-label="required">*</span>
+                </label>
+                <select id="field-frequency" name="frequency" required>
+                  <option value="" disabled selected>Select…</option>
+                  <option>Daily</option>
+                  <option>A few times a week</option>
+                  <option>Weekly</option>
+                  <option>A few times a month</option>
+                  <option>Monthly</option>
+                  <option>Only occasionally</option>
+                </select>
+                <span class="form-hint">Every level of play builds community demand.</span>
               </div>
             </div>
-            <div class="form-group">
-              <label for="field-purpose">
-                Spent on <span class="required" aria-label="required">*</span>
-              </label>
-              <select id="field-purpose" name="purpose" required>
-                <option value="" disabled selected>Select a type…</option>
-                <option value="equipment_purchase">Equipment (paddle, balls, gear)</option>
-                <option value="facility_rental">Court (rental / membership)</option>
-                <option value="tournament_entry">Tournament Entry Fees</option>
-                <option value="lessons">Lessons / Coaching</option>
-              </select>
+
+            <!-- Turnstile human check -->
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAADgW22dveBCr5JBI" style="margin-top:1rem;"></div>
+
+            <!-- Submit -->
+            <div class="form-submit">
+              <button type="submit" class="btn btn--submit" id="submit-btn">
+                <span id="submit-text">Add My Datapoint</span>
+                <span class="spinner" id="submit-spinner" aria-hidden="true"></span>
+              </button>
+              <p class="form-privacy-note">
+                🔒 Always anonymous, never sold. Used only to make the case for courts where you live.
+              </p>
             </div>
           </div>
 
-          <!-- ZIP + State (side by side) -->
-          <div class="form-row">
-            <div class="form-group">
-              <label for="field-zip">ZIP Code</label>
-              <input
-                type="text"
-                id="field-zip"
-                name="zip_code"
-                autocomplete="postal-code"
-                placeholder="e.g. 90210"
-                maxlength="10"
-                pattern="[0-9]{5}(-[0-9]{4})?"
-              />
+          <!-- ================= STEP 2 — optional, revealed after submit ================= -->
+          <div id="form-step-2" style="display:none;">
+            <div class="form-feedback form-feedback--success" style="display:block;">
+              ✓ You're in. Your datapoint is saved. Check your inbox to verify it.
             </div>
-            <div class="form-group">
-              <label for="field-state">
-                State <span class="required" aria-label="required">*</span>
-              </label>
-              <select id="field-state" name="state" autocomplete="address-level1" required>
-                <option value="">Select…</option>
-                <option value="AL">AL</option><option value="AK">AK</option>
-                <option value="AZ">AZ</option><option value="AR">AR</option>
-                <option value="CA">CA</option><option value="CO">CO</option>
-                <option value="CT">CT</option><option value="DE">DE</option>
-                <option value="FL">FL</option><option value="GA">GA</option>
-                <option value="HI">HI</option><option value="ID">ID</option>
-                <option value="IL">IL</option><option value="IN">IN</option>
-                <option value="IA">IA</option><option value="KS">KS</option>
-                <option value="KY">KY</option><option value="LA">LA</option>
-                <option value="ME">ME</option><option value="MD">MD</option>
-                <option value="MA">MA</option><option value="MI">MI</option>
-                <option value="MN">MN</option><option value="MS">MS</option>
-                <option value="MO">MO</option><option value="MT">MT</option>
-                <option value="NE">NE</option><option value="NV">NV</option>
-                <option value="NH">NH</option><option value="NJ">NJ</option>
-                <option value="NM">NM</option><option value="NY">NY</option>
-                <option value="NC">NC</option><option value="ND">ND</option>
-                <option value="OH">OH</option><option value="OK">OK</option>
-                <option value="OR">OR</option><option value="PA">PA</option>
-                <option value="RI">RI</option><option value="SC">SC</option>
-                <option value="SD">SD</option><option value="TN">TN</option>
-                <option value="TX">TX</option><option value="UT">UT</option>
-                <option value="VT">VT</option><option value="VA">VA</option>
-                <option value="WA">WA</option><option value="WV">WV</option>
-                <option value="WI">WI</option><option value="WY">WY</option>
-              </select>
-            </div>
-          </div>
-          <span class="form-hint">Your location, spend, and category are combined anonymously to build the economic case for courts in your area.</span>
-
-
-          <!-- Submit -->
-          <div class="form-submit">
-            <button type="submit" class="btn btn--submit" id="submit-btn">
-              <span id="submit-text">Add My Datapoint</span>
-              <span class="spinner" id="submit-spinner" aria-hidden="true"></span>
-            </button>
-            <p class="form-privacy-note">
-              🔒 I will never sell your info, but I do need it to help you advocate for your community more effectively.
+            <p class="form-hint" style="margin:0.75rem 0 0.25rem; font-weight:600;">
+              Optional: make your datapoint count for more.
             </p>
+            <div class="form-group">
+              <label for="field-name">Name</label>
+              <input type="text" id="field-name" name="name" autocomplete="name" placeholder="Jane Smith" />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="field-spend">Monthly pickleball spend</label>
+                <select id="field-spend" name="spend_range">
+                  <option value="" disabled selected>Select…</option>
+                  <option>Under $25</option>
+                  <option>$25–75</option>
+                  <option>$75–150</option>
+                  <option>$150+</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="field-paddle">New paddle purchases</label>
+                <select id="field-paddle" name="paddle_frequency">
+                  <option value="" disabled selected>Select…</option>
+                  <option>Every few months</option>
+                  <option>About twice a year</option>
+                  <option>About once a year</option>
+                  <option>Every couple of years</option>
+                  <option>Haven't bought one yet</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-submit">
+              <button type="button" class="btn btn--submit" id="enrich-btn">
+                <span id="enrich-text">Add these details</span>
+                <span class="spinner" id="enrich-spinner" aria-hidden="true"></span>
+              </button>
+              <button type="button" class="btn--share" id="skip-btn" style="margin-top:0.6rem;">Skip</button>
+            </div>
           </div>
 
-          <!-- Feedback messages -->
-          <div class="form-feedback form-feedback--success" id="form-success" role="alert" aria-live="polite">
-            ✓ Submission received. Thank you — your datapoint contributes to the community data effort for your area.
-            <div class="form-share">
-              <p class="form-share__prompt">Know another player? Send them here.</p>
-              <div class="form-share__actions">
-                <button class="btn--share" id="share-native" style="display:none">Share →</button>
-                <button class="btn--share" id="share-copy">Copy Link</button>
+          <!-- ================= STEP 3 — final thank you + share ================= -->
+          <div id="form-done" style="display:none;">
+            <div class="form-feedback form-feedback--success" style="display:block;">
+              ✓ Thank you! Your datapoint is recorded. Don't forget to confirm it via the email we just sent.
+              <div class="form-share">
+                <p class="form-share__prompt">Know another player? Send them here.</p>
+                <div class="form-share__actions">
+                  <button class="btn--share" id="share-native" style="display:none">Share →</button>
+                  <button class="btn--share" id="share-copy">Copy Link</button>
+                </div>
               </div>
             </div>
           </div>
-          <div class="form-feedback form-feedback--error" id="form-error" role="alert" aria-live="polite">
-            Submission failed. Please check your connection and try again. If the issue persists, contact us directly.
+
+          <!-- Error -->
+          <div class="form-feedback form-feedback--error" id="form-error" role="alert" aria-live="polite" style="display:none;">
+            Submission failed. Please check your connection and try again.
           </div>
 
         </form>
@@ -2562,7 +2553,7 @@
           &copy; <span id="footer-year"></span> PaddleClub. All rights reserved.
         </p>
         <p class="footer__disclaimer">
-          Economic data is aggregated and anonymized before use in any public report or government presentation.
+          Your data is aggregated and anonymized before use in any public report or government presentation.
         </p>
       </div>
 
@@ -2624,10 +2615,8 @@
     (function initFieldMemory() {
       // Map: localStorage key → { formName, elementId }
       const FIELDS = [
-        { key: 'name',     formName: 'name',     id: 'field-name'  },
-        { key: 'city',     formName: 'city',     id: 'field-city'  },
-        { key: 'state',    formName: 'state',    id: 'field-state' },
-        { key: 'zip_code', formName: 'zip_code', id: 'field-zip'   },
+        { key: 'name',     formName: 'name',     id: 'field-name' },
+        { key: 'zip_code', formName: 'zip_code', id: 'field-zip'  },
       ];
 
       // Pre-fill saved values on page load
@@ -2681,91 +2670,134 @@
          amount        → number (transaction total in USD)
     ---------------------------------------------------------- */
     (function initFormHandler() {
-      const form        = document.getElementById('paddleclub-form');
-      const submitBtn   = document.getElementById('submit-btn');
-      const submitText  = document.getElementById('submit-text');
-      const spinner     = document.getElementById('submit-spinner');
-      const successMsg  = document.getElementById('form-success');
-      const errorMsg    = document.getElementById('form-error');
+      /* ----- Backend endpoints (filled in once the Activepieces flows are built) ----- */
+      const GATE_URL   = 'https://cloud.activepieces.com/api/v1/webhooks/EEWdjP0GMONAY7tACJ3AZ/sync';   /* public intake gate; verifies Turnstile; /sync returns the token */
+      const ENRICH_URL = 'https://cloud.activepieces.com/api/v1/webhooks/4nXTgYazofwmsJE8YoeN4'; /* attaches optional step-2 details by token */
+      const AUTH_KEY   = '79385cc3ac101c8dd203a3c62a1ab1f72b127b67e986eceb'; /* matches webhook Header Auth */
 
-      function setLoading(loading) {
-        submitBtn.disabled  = loading;
-        submitText.textContent = loading ? 'Submitting…' : 'Add My Datapoint';
-        spinner.style.display  = loading ? 'inline-block' : 'none';
+      const form       = document.getElementById('paddleclub-form');
+      const step1      = document.getElementById('form-step-1');
+      const step2      = document.getElementById('form-step-2');
+      const done       = document.getElementById('form-done');
+      const errorMsg   = document.getElementById('form-error');
+      const submitBtn  = document.getElementById('submit-btn');
+      const submitText = document.getElementById('submit-text');
+      const spinner    = document.getElementById('submit-spinner');
+      const enrichBtn  = document.getElementById('enrich-btn');
+      const enrichText = document.getElementById('enrich-text');
+      const enrichSpin = document.getElementById('enrich-spinner');
+      const skipBtn    = document.getElementById('skip-btn');
+
+      let recordToken = null; /* returned by the gate; links step-2 details to the saved row */
+
+      function setLoading(on) {
+        submitBtn.disabled = on;
+        submitText.textContent = on ? 'Submitting…' : 'Add My Datapoint';
+        spinner.style.display = on ? 'inline-block' : 'none';
       }
-
-      function showFeedback(type) {
-        successMsg.style.display = type === 'success' ? 'block' : 'none';
-        errorMsg.style.display   = type === 'error'   ? 'block' : 'none';
+      function showError(msg) {
+        errorMsg.textContent = msg || 'Submission failed. Please check your connection and try again.';
+        errorMsg.style.display = 'block';
       }
+      function hideError() { errorMsg.style.display = 'none'; }
 
-      function validateForm() {
-        const email   = form['email'].value.trim();
-        const city    = form['city'].value.trim();
-        const state   = form['state'].value.trim();
-        const purpose = form['purpose'].value;
-        const amount  = parseFloat(form['amount'].value);
-
-        // Required: email, city, state, purpose, amount
-        if (!email || !city || !state || !purpose) return false;
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return false;
-        if (isNaN(amount) || amount <= 0) return false;
-
-        // Optional: ZIP — validate format only if provided
-        const zip = form['zip_code'].value.trim();
-        if (zip && !/^\d{5}(-\d{4})?$/.test(zip)) return false;
-
+      function validateStep1() {
+        const email = form['email'].value.trim();
+        const zip   = form['zip_code'].value.trim();
+        const freq  = form['frequency'].value;
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return false;
+        if (!/^\d{5}(-\d{4})?$/.test(zip)) return false;
+        if (!freq) return false;
         return true;
       }
+      function turnstileToken() {
+        try { return (window.turnstile && turnstile.getResponse()) || ''; }
+        catch (e) { return ''; }
+      }
+      function revealStep2() { step1.style.display = 'none'; step2.style.display = 'block'; }
+      function finish()      { step2.style.display = 'none'; done.style.display  = 'block'; }
 
+      /* ----- STEP 1: save the core datapoint ----- */
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        showFeedback(null);
+        hideError();
+        if (!validateStep1()) {
+          showError('Please enter a valid email, ZIP code, and how often you play.');
+          return;
+        }
+        const tsToken = turnstileToken();
+        if (!tsToken) { showError('Please complete the verification check and try again.'); return; }
 
-        if (!validateForm()) {
-          showFeedback('error');
-          errorMsg.textContent = 'Please fill in all required fields with valid information.';
+        if (GATE_URL.includes('TBD')) {
+          console.log('[PaddleClub] Gate URL not configured. Step-1 payload:', {
+            email: form['email'].value.trim(),
+            zip_code: form['zip_code'].value.trim(),
+            frequency: form['frequency'].value
+          });
+          recordToken = 'preview-token';
+          revealStep2();
           return;
         }
 
-        const webhookUrl = form.dataset.action;
-        if (!webhookUrl || webhookUrl.includes('YOUR_ACTIVEPIECES')) {
-          /* Development stub — log payload and show success for preview */
-          console.log('[PaddleClub] Webhook URL not yet configured. FormData payload:',
-            Object.fromEntries(new FormData(form).entries())
-          );
-          const emailVal = form['email'].value.trim();
-          showFeedback('success');
-          form.reset();
-          if (window._pcEmail) window._pcEmail.save(emailVal);
-          return;
-        }
-
-        /* Live submission */
         setLoading(true);
         try {
-          /* Convert form to JSON — more reliable with Activepieces webhook parsing */
-          const payload = Object.fromEntries(new FormData(form).entries());
-
-          const response = await fetch(webhookUrl, {
+          const res = await fetch(GATE_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
+            headers: { 'Content-Type': 'application/json', 'x-paddleclub-key': AUTH_KEY },
+            body: JSON.stringify({
+              email: form['email'].value.trim(),
+              zip_code: form['zip_code'].value.trim(),
+              frequency: form['frequency'].value,
+              'cf-turnstile-response': tsToken
+            })
           });
-
-          if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-          const emailVal = form['email'].value.trim();
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const data = await res.json().catch(() => ({}));
+          recordToken = data.token || null;
+          if (!recordToken) {
+            showError("We couldn't verify your submission. Please complete the check and try again.");
+            if (window.turnstile) turnstile.reset();
+            return;
+          }
+          if (window._pcEmail)  window._pcEmail.save(form['email'].value.trim());
           if (window._pcFields) window._pcFields.save(form);
-          showFeedback('success');
-          form.reset();
-          if (window._pcEmail) window._pcEmail.save(emailVal);
-
+          revealStep2();
         } catch (err) {
           console.error('[PaddleClub] Submission error:', err);
-          showFeedback('error');
+          showError();
+          if (window.turnstile) turnstile.reset();
         } finally {
           setLoading(false);
+        }
+      });
+
+      /* ----- STEP 2: optional enrichment ----- */
+      if (skipBtn) skipBtn.addEventListener('click', finish);
+      if (enrichBtn) enrichBtn.addEventListener('click', async () => {
+        const name   = form['name'].value.trim();
+        const spend  = form['spend_range'].value;
+        const paddle = form['paddle_frequency'].value;
+        if (!name && !spend && !paddle) { finish(); return; }
+
+        if (!ENRICH_URL || ENRICH_URL.includes('TBD') || !recordToken) {
+          console.log('[PaddleClub] Enrich URL/token not configured. Step-2 payload:',
+            { name, spend_range: spend, paddle_frequency: paddle });
+          finish();
+          return;
+        }
+        enrichBtn.disabled = true;
+        enrichText.textContent = 'Saving…';
+        enrichSpin.style.display = 'inline-block';
+        try {
+          await fetch(ENRICH_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-paddleclub-key': AUTH_KEY },
+            body: JSON.stringify({ token: recordToken, name, spend_range: spend, paddle_frequency: paddle })
+          });
+        } catch (err) {
+          console.error('[PaddleClub] Enrich error:', err);
+        } finally {
+          finish();
         }
       });
     })();
