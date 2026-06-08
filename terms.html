@@ -161,7 +161,19 @@
       background: var(--color-accent-dark);
       color: rgba(255,255,255,0.8);
       padding-block: var(--space-lg) var(--space-xl);
+      position: relative;
+      overflow: hidden;
     }
+
+    .footer .court-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .footer .container { position: relative; z-index: 1; }
 
     .footer__brand {
       padding-bottom: var(--space-md);
@@ -178,7 +190,100 @@
 
     .footer__tagline {
       font-size: 0.8125rem;
+      line-height: 1.7;
       color: rgba(255,255,255,0.55);
+      max-width: 300px;
+    }
+
+    .footer__privacy-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 99px;
+      padding: 4px 12px;
+    }
+
+    /* Lower row: Platform (1fr) | Transparency (2fr) — always */
+    .footer__lower {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    @media (max-width: 520px) {
+      .footer__lower { grid-template-columns: 1fr; gap: var(--space-md); }
+      .footer__lower > div:first-child { order: 2; }
+      .footer__lower > div:last-child  { order: 1; }
+    }
+
+    .footer__section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: var(--space-md);
+    }
+
+    .footer__policy-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .footer__policy-list li {
+      font-size: 0.875rem;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      color: rgba(255,255,255,0.65);
+    }
+
+    .footer__policy-list li::before {
+      content: '—';
+      color: rgba(255,255,255,0.25);
+      flex-shrink: 0;
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .footer__links a {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer__links a:hover { color: #fff; }
+
+    .tag-planned {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 99px;
+      padding: 2px 7px;
+      margin-left: 6px;
+      vertical-align: middle;
+      white-space: nowrap;
     }
 
     .footer__bottom {
@@ -197,20 +302,17 @@
       color: rgba(255,255,255,0.3);
     }
 
-    .footer__links {
-      list-style: none;
-      display: flex;
-      gap: var(--space-lg);
+    .footer__disclaimer {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.25);
+      max-width: 480px;
+      text-align: right;
+      line-height: 1.6;
     }
 
-    .footer__links a {
-      font-size: 0.8125rem;
-      color: rgba(255,255,255,0.45);
-      text-decoration: none;
-      transition: color 0.15s;
+    @media (max-width: 640px) {
+      .footer__disclaimer { text-align: left; }
     }
-
-    .footer__links a:hover { color: #fff; }
   </style>
 </head>
 
@@ -218,11 +320,11 @@
 
   <nav class="nav" role="navigation" aria-label="Primary">
     <div class="container nav__inner">
-      <a href="paddleclub-v2.4.html" class="nav__logo" aria-label="PaddleClub.org home">
+      <a href="index.html" class="nav__logo" aria-label="PaddleClub.org home">
         PaddleClub.org
         <span>Pickleball for All</span>
       </a>
-      <a href="paddleclub-v2.4.html#submit" class="nav__cta">Add My Datapoint</a>
+      <a href="index.html#submit" class="nav__cta">Add My Datapoint</a>
     </div>
   </nav>
 
@@ -276,31 +378,132 @@
 
       <div style="margin-top: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid var(--color-border); text-align: center;">
         <p style="font-size: 0.9375rem; color: var(--color-text-muted); margin-bottom: var(--space-md);">Ready to contribute to the count?</p>
-        <a href="paddleclub-v2.4.html#submit" style="display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-sans); font-size: 0.9375rem; font-weight: 600; padding: 0.75rem 1.5rem; background: var(--color-gold); color: var(--color-accent-dark); border-radius: var(--radius-sm); text-decoration: none; transition: background 0.15s ease;">Add My Datapoint</a>
+        <a href="index.html#submit" style="display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-sans); font-size: 0.9375rem; font-weight: 600; padding: 0.75rem 1.5rem; background: var(--color-gold); color: var(--color-accent-dark); border-radius: var(--radius-sm); text-decoration: none; transition: background 0.15s ease;">Add My Datapoint</a>
       </div>
 
     </div>
   </main>
 
   <footer class="footer" role="contentinfo">
+
+    <!-- Staircase court pattern — mirrors index footer (DELTA=35, courts 220×100) -->
+    <svg class="court-bg" viewBox="0 0 1100 400" preserveAspectRatio="xMidYMid slice"
+         xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="foot-ft" x1="0%" y1="0%"   x2="0%" y2="100%">
+          <stop offset="0%"   stop-color="#112D4E" stop-opacity="0.85"/>
+          <stop offset="7%"   stop-color="#112D4E" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#112D4E" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="foot-fb" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%"   stop-color="#112D4E" stop-opacity="0.9"/>
+          <stop offset="10%"  stop-color="#112D4E" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#112D4E" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="foot-fl" x1="0%" y1="0%"   x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#112D4E" stop-opacity="0.9"/>
+          <stop offset="10%"  stop-color="#112D4E" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#112D4E" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="foot-fr" x1="100%" y1="0%" x2="0%"   y2="0%">
+          <stop offset="0%"   stop-color="#112D4E" stop-opacity="0.9"/>
+          <stop offset="10%"  stop-color="#112D4E" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#112D4E" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <g id="footer-courts" transform="rotate(-12, 550, 200)"></g>
+      <rect width="1100" height="400" fill="url(#foot-ft)"/>
+      <rect width="1100" height="400" fill="url(#foot-fb)"/>
+      <rect width="1100" height="400" fill="url(#foot-fl)"/>
+      <rect width="1100" height="400" fill="url(#foot-fr)"/>
+    </svg>
+
     <div class="container">
+
+      <!-- Brand — always full width on top -->
       <div class="footer__brand">
         <p class="footer__logo">PaddleClub.org</p>
-        <p class="footer__tagline">Cities build what they can measure. Help us measure pickleball.</p>
+        <p class="footer__tagline">
+          Cities build what they can measure. Help us measure pickleball.
+        </p>
+        <span class="footer__privacy-badge">
+          🔒 Privacy-First Data Collection
+        </span>
       </div>
+
+      <!-- Lower row: Platform left, Data Transparency right -->
+      <div class="footer__lower">
+
+        <!-- Platform links -->
+        <div>
+          <p class="footer__section-title">Platform</p>
+          <ul class="footer__links">
+            <li><a href="index.html#submit">Add Your Datapoint</a></li>
+            <li><a href="mailto:troy@paddleclub.org">Contact Us</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="mailto:troy@paddleclub.org?subject=Brand%20%26%20Retailer%20Partnership%20Inquiry&body=Hi%20Troy%2C%0A%0AI%27m%20interested%20in%20partnering%20with%20PaddleClub.%0A%0ACompany%3A%20%0AWebsite%3A%20%0AContact%20Name%3A%20%0A">Partner With Us (Brands &amp; Retailers)</a></li>
+            <li><a href="mailto:troy@paddleclub.org?subject=Club%20%26%20Facility%20Partnership%20Inquiry&body=Hi%20Troy%2C%0A%0AI%27m%20interested%20in%20partnering%20with%20PaddleClub.%0A%0AClub%2FFacility%20Name%3A%20%0ALocation%3A%20%0AContact%20Name%3A%20%0A">Partner With Us (Clubs &amp; Facilities)</a></li>
+          </ul>
+        </div>
+
+        <!-- Data transparency -->
+        <div class="footer__transparency">
+          <p class="footer__section-title">Data Transparency</p>
+          <ul class="footer__policy-list">
+            <li>Never sold to third parties</li>
+            <li>Combined with others in your area to build the case for local courts</li>
+            <li>Personal information always stays anonymous</li>
+            <li>Delivered as an anonymized report for you to bring to city council <span class="tag-planned">Planned</span></li>
+          </ul>
+        </div>
+
+      </div>
+
       <div class="footer__bottom">
-        <p class="footer__copyright">&copy; <span id="footer-year"></span> PaddleClub. All rights reserved.</p>
-        <ul class="footer__links">
-          <li><a href="paddleclub-v2.4.html">Home</a></li>
-          <li><a href="paddleclub-privacy-v1.0.html">Privacy Policy</a></li>
-          <li><a href="mailto:troy@paddleclub.org">Contact</a></li>
-        </ul>
+        <p class="footer__copyright">
+          &copy; <span id="footer-year"></span> PaddleClub. All rights reserved.
+        </p>
+        <p class="footer__disclaimer">
+          Your data is aggregated and anonymized before use in any public report or government presentation.
+        </p>
       </div>
+
     </div>
   </footer>
 
   <script>
     document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    /* Footer court-line generator — mirrors index.html */
+    (function() {
+      var LINE  = 'rgba(255,255,255,0.08)';
+      var DELTA = 35, CW = 220, CH = 100;
+      var Y0 = -400, ROWS = 14, XMIN = -700, XMAX = 1800;
+      var out = '';
+      for (var r = 0; r <= ROWS; r++) {
+        var y = Y0 + r * CH;
+        out += '<line x1="'+XMIN+'" y1="'+y+'" x2="'+XMAX+'" y2="'+y+'" stroke="'+LINE+'" stroke-width="0.75"/>';
+      }
+      for (var r = 0; r < ROWS; r++) {
+        var yT = Y0 + r * CH, yB = yT + CH, yC = yT + CH/2;
+        var offset = r * DELTA;
+        var kMin = Math.ceil((XMIN - offset) / CW) - 1;
+        var kMax = Math.floor((XMAX - offset) / CW) + 1;
+        for (var k = kMin; k <= kMax; k++) {
+          var xb = offset + k * CW;
+          if (xb + CW < XMIN || xb > XMAX) continue;
+          var xN = xb+110, xL = xb+75, xR = xb+145;
+          out += '<line x1="'+xb+'" y1="'+yT+'" x2="'+xb+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="0.75"/>';
+          out += '<line x1="'+xN+'" y1="'+yT+'" x2="'+xN+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="1"/>';
+          out += '<line x1="'+xL+'" y1="'+yT+'" x2="'+xL+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="0.75"/>';
+          out += '<line x1="'+xR+'" y1="'+yT+'" x2="'+xR+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="0.75"/>';
+          out += '<line x1="'+xb+'" y1="'+yC+'" x2="'+xL+'" y2="'+yC+'" stroke="'+LINE+'" stroke-width="0.5"/>';
+          out += '<line x1="'+xR+'" y1="'+yC+'" x2="'+(xb+CW)+'" y2="'+yC+'" stroke="'+LINE+'" stroke-width="0.5"/>';
+        }
+      }
+      document.getElementById('footer-courts').innerHTML = out;
+    })();
   </script>
 
 </body>

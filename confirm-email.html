@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="color-scheme" content="light only" />
+  <meta name="supported-color-schemes" content="light only" />
+  <title>Confirm your PaddleClub datapoint</title>
+  <!--
+    ============================================================
+    PaddleClub — confirmation email (Activepieces Gmail step)
+    Brand-matched, email-safe: table layout + inline styles.
+    Fonts: Georgia echoes DM Serif Display; Arial echoes Inter
+    (web fonts are stripped by most email clients).
+    Palette mirrors index.html: navy #112D4E / #1A4A7A, gold #E8B84B.
+    KEEP the {{trigger.output.body.confirm_token}} variable intact.
+    ============================================================
+  -->
+  <style>
+    /* Progressive enhancement for clients that honor <style>.
+       All critical styling is also inlined below for the rest. */
+    body { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+    table { border-collapse: collapse; }
+    img { border: 0; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+    a { color: #1A4A7A; }
+    @media only screen and (max-width: 600px) {
+      .pc-card { width: 100% !important; }
+      .pc-pad { padding-left: 24px !important; padding-right: 24px !important; }
+      .pc-h1 { font-size: 24px !important; }
+    }
+  </style>
+</head>
+
+<body style="margin:0; padding:0; background-color:#F7F7F5;">
+
+  <!-- Preheader (hidden preview text) -->
+  <div style="display:none; max-height:0; overflow:hidden; mso-hide:all; font-size:1px; line-height:1px; color:#F7F7F5;">
+    One quick click confirms your datapoint so it counts toward the verified total.
+  </div>
+
+  <!-- Outer wrapper -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F7F7F5;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <!-- Card -->
+        <table role="presentation" class="pc-card" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background-color:#FFFFFF; border:1px solid #E2E2DC; border-radius:12px; overflow:hidden;">
+
+          <!-- ===== Header (navy + court-line background) ===== -->
+          <tr>
+            <td background="https://paddleclub.org/email-bg.png" bgcolor="#112D4E" valign="top"
+                style="background-color:#112D4E; background-image:url('https://paddleclub.org/email-bg.png'); background-position:center; background-size:cover; background-repeat:no-repeat; border-top:4px solid #E8B84B;">
+              <!--[if gte mso 9]>
+              <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:600px; height:96px;">
+                <v:fill type="frame" src="https://paddleclub.org/email-bg.png" color="#112D4E" />
+                <v:textbox inset="0,0,0,0"><![endif]-->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding:28px 40px;">
+                    <p style="margin:0; font-family:Georgia, 'Times New Roman', serif; font-size:22px; line-height:1.1; color:#FFFFFF; letter-spacing:-0.01em;">
+                      PaddleClub.org
+                    </p>
+                    <p style="margin:4px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; line-height:1.4; letter-spacing:0.12em; text-transform:uppercase; color:#9FB3CC;">
+                      Pickleball for All
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              <!--[if gte mso 9]></v:textbox></v:rect><![endif]-->
+            </td>
+          </tr>
+
+          <!-- ===== Body ===== -->
+          <tr>
+            <td class="pc-pad" style="padding:40px;">
+
+              <!-- Eyebrow -->
+              <p style="margin:0 0 10px 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; font-weight:bold; letter-spacing:0.12em; text-transform:uppercase; color:#1A4A7A;">
+                One last step
+              </p>
+
+              <!-- Headline -->
+              <h1 class="pc-h1" style="margin:0 0 16px 0; font-family:Georgia, 'Times New Roman', serif; font-size:28px; line-height:1.15; color:#1A1A18; font-weight:normal;">
+                Confirm your datapoint
+              </h1>
+
+              <!-- Body copy -->
+              <p style="margin:0 0 16px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:1.7; color:#41434a;">
+                Thanks for adding your datapoint to PaddleClub. One quick click confirms it's really you and moves your entry into the <strong style="color:#1A1A18;">verified total</strong>: the number that helps cities say yes to more courts.
+              </p>
+
+              <!-- Bulletproof CTA button -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0 8px 0;">
+                <tr>
+                  <td align="center" bgcolor="#E8B84B" style="border-radius:4px;">
+                    <!--[if mso]>&nbsp;<![endif]-->
+                    <a href="https://paddleclub.org/confirm.html?token={{trigger.output.body.confirm_token}}"
+                       style="display:inline-block; font-family:Arial, Helvetica, sans-serif; font-size:16px; font-weight:bold; color:#112D4E; text-decoration:none; padding:14px 32px; border-radius:4px; background-color:#E8B84B;">
+                      Confirm my datapoint &rarr;
+                    </a>
+                    <!--[if mso]>&nbsp;<![endif]-->
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Fallback plain link -->
+              <p style="margin:16px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#6B6B63;">
+                Button not working? Copy and paste this link into your browser:<br />
+                <a href="https://paddleclub.org/confirm.html?token={{trigger.output.body.confirm_token}}" style="color:#1A4A7A; word-break:break-all;">https://paddleclub.org/confirm.html?token={{trigger.output.body.confirm_token}}</a>
+              </p>
+
+              <!-- Reassurance note -->
+              <p style="margin:24px 0 0 0; padding-top:20px; border-top:1px solid #E2E2DC; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#6B6B63;">
+                If you didn't submit a datapoint to PaddleClub, you can safely ignore this email; nothing will be recorded.
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- ===== Footer (navy + court-line background) ===== -->
+          <tr>
+            <td background="https://paddleclub.org/email-bg.png" bgcolor="#112D4E" valign="top"
+                style="background-color:#112D4E; background-image:url('https://paddleclub.org/email-bg.png'); background-position:center; background-size:cover; background-repeat:no-repeat;">
+              <!--[if gte mso 9]>
+              <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:600px; height:200px;">
+                <v:fill type="frame" src="https://paddleclub.org/email-bg.png" color="#112D4E" />
+                <v:textbox inset="0,0,0,0"><![endif]-->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding:28px 40px;">
+                    <p style="margin:0 0 6px 0; font-family:Georgia, 'Times New Roman', serif; font-size:18px; color:#FFFFFF;">
+                      PaddleClub.org
+                    </p>
+                    <p style="margin:0 0 16px 0; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#8FA3BC;">
+                      Cities build what they can measure. Help us measure pickleball.
+                    </p>
+                    <p style="margin:0 0 16px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#6F84A0;">
+                      Your data is aggregated and anonymized before use in any public report or government presentation.
+                    </p>
+                    <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6;">
+                      <a href="https://paddleclub.org/privacy.html" style="color:#9FB3CC; text-decoration:none;">Privacy Policy</a>
+                      &nbsp;&middot;&nbsp;
+                      <a href="https://paddleclub.org/terms.html" style="color:#9FB3CC; text-decoration:none;">Terms of Service</a>
+                      &nbsp;&middot;&nbsp;
+                      <a href="mailto:troy@paddleclub.org" style="color:#9FB3CC; text-decoration:none;">Contact</a>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              <!--[if gte mso 9]></v:textbox></v:rect><![endif]-->
+            </td>
+          </tr>
+
+        </table>
+        <!-- /Card -->
+
+        <!-- Sub-footer copyright -->
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px;">
+          <tr>
+            <td align="center" style="padding:20px 16px; font-family:Arial, Helvetica, sans-serif; font-size:11px; line-height:1.5; color:#9A9A92;">
+              &copy; PaddleClub. All rights reserved.<br />
+              You received this because you submitted a datapoint at paddleclub.org.
+            </td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
