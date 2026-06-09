@@ -116,7 +116,7 @@
     }
 
     .section {
-      padding-block: var(--space-3xl);
+      padding-block: 1.25rem var(--space-2xl);
     }
 
     .section--alt {
@@ -499,6 +499,9 @@
       margin-top: 2px;
     }
 
+    /* Keep "Unsubscribe anytime." together as one unit (never split). */
+    .hint-tail { white-space: nowrap; }
+
     input[type="text"],
     input[type="email"],
     input[type="tel"],
@@ -664,6 +667,7 @@
       color: var(--color-text-muted);
       text-align: center;
     }
+
 
     /* Inline form feedback */
     .form-feedback {
@@ -1562,8 +1566,8 @@
       .form-section__intro .section-body,
       .form-section__intro .form-section__checklist { display: none; }
 
-      /* Form section — reduce gap between intro and card */
-      .form-section__grid { gap: var(--space-sm); }
+      /* Form section — gap between headline and form card */
+      .form-section__grid { gap: var(--space-xs); }
 
       /* Dashboard — hide heatmap on mobile; leaderboard carries the view */
       #panel-community .embed-placeholder { display: none; }
@@ -1587,12 +1591,24 @@
     .founder-strip {
       background: var(--color-accent);
       color: #fff;
-      padding-top: var(--space-sm);
+      padding-top: var(--space-md);
       padding-bottom: var(--space-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .founder-strip .court-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
     }
 
     .founder-strip__inner {
       text-align: center;
+      position: relative;
+      z-index: 1;
     }
 
     .founder-strip__label {
@@ -1970,25 +1986,6 @@
     </div>
   </section>
 
-
-  <!-- ============================================================
-       FOUNDER STRIP START — delete this entire block to revert to v1.3
-       ============================================================ -->
-  <section class="founder-strip" aria-label="A note from the founder">
-    <div class="container founder-strip__inner">
-      <p class="founder-strip__label">From the founder</p>
-      <blockquote class="founder-strip__quote">
-        "Since 2011, my family has helped cities from San Diego to Santa Monica
-        say yes to more courts... by showing real numbers.
-        <span style="color: var(--color-gold);">PaddleClub <span style="white-space: nowrap;">does the same for yours.</span></span>"
-      </blockquote>
-      <p class="founder-strip__byline">
-        <strong>Troy Hamner</strong> — Founder, PaddleClub.org
-      </p>
-    </div>
-  </section>
-  <!-- FOUNDER STRIP END ========================================= -->
-
   <!-- ============================================================
        SECTION 3 — SUBMISSION FORM
        ============================================================ -->
@@ -1997,7 +1994,6 @@
 
       <!-- Left: Explainer -->
       <div class="form-section__intro">
-        <p class="section-label">Add Your Datapoint</p>
         <h2 class="section-headline" id="form-headline">
           Each submission adds leverage with your city.
         </h2>
@@ -2039,7 +2035,7 @@
                 placeholder="jane@example.com"
                 required
               />
-              <span class="form-hint" id="email-hint">Confirms you're real, and lets me keep you updated on what I'm doing. Unsubscribe anytime.</span>
+              <span class="form-hint" id="email-hint">Confirms you're real, and keeps you in the loop. <span class="hint-tail">Unsubscribe anytime.</span></span>
             </div>
 
             <!-- ZIP + Usual frequency (side by side) -->
@@ -2077,8 +2073,9 @@
               </div>
             </div>
 
-            <!-- Turnstile human check -->
-            <div class="cf-turnstile" data-sitekey="0x4AAAAAADgW22dveBCr5JBI" style="margin-top:1rem;"></div>
+            <!-- Turnstile human check — runs silently (interaction-only);
+                 only shows a visible challenge if Cloudflare requires one. -->
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAADgW22dveBCr5JBI" data-appearance="interaction-only"></div>
 
             <!-- Submit -->
             <div class="form-submit">
@@ -2160,6 +2157,88 @@
 
     </div>
   </section>
+
+  <!-- ============================================================
+       FOUNDER STRIP START — delete this entire block to revert to v1.3
+       ============================================================ -->
+  <section class="founder-strip" aria-label="A note from the founder">
+
+    <!-- Faint court-line texture — matches hero + footer; edge-faded to the
+         founder navy (#1A4A7A) and kept very subtle so the quote stays legible. -->
+    <svg class="court-bg" viewBox="0 0 1100 240" preserveAspectRatio="xMidYMid slice"
+         xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="fdr-ft" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#1A4A7A" stop-opacity="0.9"/>
+          <stop offset="20%" stop-color="#1A4A7A" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#1A4A7A" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="fdr-fb" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#1A4A7A" stop-opacity="0.9"/>
+          <stop offset="20%" stop-color="#1A4A7A" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#1A4A7A" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="fdr-fl" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#1A4A7A" stop-opacity="0.85"/>
+          <stop offset="14%" stop-color="#1A4A7A" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#1A4A7A" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="fdr-fr" x1="100%" y1="0%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#1A4A7A" stop-opacity="0.85"/>
+          <stop offset="14%" stop-color="#1A4A7A" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#1A4A7A" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <g id="founder-courts" transform="rotate(-12, 550, 120)"></g>
+      <rect width="1100" height="240" fill="url(#fdr-ft)"/>
+      <rect width="1100" height="240" fill="url(#fdr-fb)"/>
+      <rect width="1100" height="240" fill="url(#fdr-fl)"/>
+      <rect width="1100" height="240" fill="url(#fdr-fr)"/>
+    </svg>
+    <script>
+      (function() {
+        var LINE  = 'rgba(255,255,255,0.20)';   /* hero-style courts, slightly toned down */
+        var DELTA = 70, CW = 440, CH = 200;      /* hero-style: full-size courts */
+        var Y0 = -300, ROWS = 4, XMIN = -700, XMAX = 1800;
+        var out = '';
+        for (var r = 0; r <= ROWS; r++) {
+          var y = Y0 + r * CH;
+          out += '<line x1="'+XMIN+'" y1="'+y+'" x2="'+XMAX+'" y2="'+y+'" stroke="'+LINE+'" stroke-width="1.5"/>';
+        }
+        for (var r = 0; r < ROWS; r++) {
+          var yT = Y0 + r * CH, yB = yT + CH, yC = yT + CH/2;
+          var offset = r * DELTA;
+          var kMin = Math.ceil((XMIN - offset) / CW) - 1;
+          var kMax = Math.floor((XMAX - offset) / CW) + 1;
+          for (var k = kMin; k <= kMax; k++) {
+            var xb = offset + k * CW;
+            if (xb + CW < XMIN || xb > XMAX) continue;
+            var xN = xb+220, xL = xb+150, xR = xb+290;
+            out += '<line x1="'+xb+'" y1="'+yT+'" x2="'+xb+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="1.5"/>';
+            out += '<line x1="'+xN+'" y1="'+yT+'" x2="'+xN+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="2"/>';
+            out += '<line x1="'+xL+'" y1="'+yT+'" x2="'+xL+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="1.5"/>';
+            out += '<line x1="'+xR+'" y1="'+yT+'" x2="'+xR+'" y2="'+yB+'" stroke="'+LINE+'" stroke-width="1.5"/>';
+            out += '<line x1="'+xb+'" y1="'+yC+'" x2="'+xL+'" y2="'+yC+'" stroke="'+LINE+'" stroke-width="1"/>';
+            out += '<line x1="'+xR+'" y1="'+yC+'" x2="'+(xb+CW)+'" y2="'+yC+'" stroke="'+LINE+'" stroke-width="1"/>';
+          }
+        }
+        document.getElementById('founder-courts').innerHTML = out;
+      })();
+    </script>
+
+    <div class="container founder-strip__inner">
+      <p class="founder-strip__label">From the founder</p>
+      <blockquote class="founder-strip__quote">
+        "Since 2011, my family has helped cities from San Diego to Santa Monica
+        say yes to more courts... by showing real numbers.
+        <span style="color: var(--color-gold);">PaddleClub <span style="white-space: nowrap;">does the same for yours.</span></span>"
+      </blockquote>
+      <p class="founder-strip__byline">
+        <strong>Troy Hamner</strong> — Founder, PaddleClub.org
+      </p>
+    </div>
+  </section>
+  <!-- FOUNDER STRIP END ========================================= -->
 
 
   <!-- ============================================================
