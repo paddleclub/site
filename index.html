@@ -45,6 +45,10 @@
       --color-accent-dark: #112D4E;        /* Deep navy */
       --color-gold:        #E8B84B;        /* Pickleball gold — primary CTA accent */
       --color-gold-dark:   #C4902A;        /* Gold hover/dark state */
+      --color-silver:      #B4BAC4;        /* 2nd-place leaderboard bar (light end) */
+      --color-silver-dark: #767E8C;        /* 2nd-place bar (dark end) + rank label */
+      --color-bronze:      #CD8C4E;        /* 3rd-place leaderboard bar (light end) */
+      --color-bronze-dark: #9A6630;        /* 3rd-place bar (dark end) + rank label */
       --color-warning:     #B45309;
       --color-error:       #991B1B;
       --color-success:     #166534;
@@ -184,7 +188,7 @@
     .hero {
       background: var(--color-accent);
       color: #fff;
-      padding-block: var(--space-3xl) 1.67rem;
+      padding-block: var(--space-3xl) var(--space-sm);
       position: relative;
       overflow: hidden;
     }
@@ -921,6 +925,16 @@
       opacity: 1;
     }
 
+    .zip-leaderboard__item:nth-child(2) .zip-leaderboard__rank {
+      color: var(--color-silver-dark);
+      opacity: 1;
+    }
+
+    .zip-leaderboard__item:nth-child(3) .zip-leaderboard__rank {
+      color: var(--color-bronze-dark);
+      opacity: 1;
+    }
+
     .zip-leaderboard__bar-wrap {
       flex: 1;
       display: flex;
@@ -946,7 +960,7 @@
 
     .zip-leaderboard__bar-fill {
       height: 100%;
-      background: var(--color-accent-lt);
+      background: var(--color-accent);   /* 4th place and below — flat brand navy */
       border-radius: 99px;
       width: 0%;
       transition: width 0.6s ease;
@@ -954,6 +968,16 @@
 
     .zip-leaderboard__item:first-child .zip-leaderboard__bar-fill {
       background: var(--color-gold);
+    }
+
+    /* 2nd place — metallic silver so it reads clearly on the light track */
+    .zip-leaderboard__item:nth-child(2) .zip-leaderboard__bar-fill {
+      background: linear-gradient(90deg, var(--color-silver-dark), var(--color-silver));
+    }
+
+    /* 3rd place — bronze, completing the podium */
+    .zip-leaderboard__item:nth-child(3) .zip-leaderboard__bar-fill {
+      background: linear-gradient(90deg, var(--color-bronze-dark), var(--color-bronze));
     }
 
     .zip-leaderboard__count {
@@ -1531,7 +1555,7 @@
       .btn--ghost          { display: none; }
 
       /* Hero — tighten padding */
-      .hero { padding-block: var(--space-xl) var(--space-xl); }
+      .hero { padding-block: var(--space-xl) var(--space-sm); }
 
       /* Form section — hide explainer copy and checklist;
          keep only the label + headline so context isn't zero */
@@ -1563,7 +1587,7 @@
     .founder-strip {
       background: var(--color-accent);
       color: #fff;
-      padding-top: var(--space-sm);
+      padding-top: var(--space-xs);
       padding-bottom: var(--space-md);
     }
 
@@ -1942,10 +1966,6 @@
         Courts get built on data. Add yours.
       </p>
 
-      <div class="hero__actions">
-        <a href="#submit" class="btn btn--primary">Add My Datapoint</a>
-      </div>
-
 
     </div>
   </section>
@@ -1968,6 +1988,178 @@
     </div>
   </section>
   <!-- FOUNDER STRIP END ========================================= -->
+
+  <!-- ============================================================
+       SECTION 3 — SUBMISSION FORM
+       ============================================================ -->
+  <section class="section" id="submit" aria-labelledby="form-headline">
+    <div class="container form-section__grid">
+
+      <!-- Left: Explainer -->
+      <div class="form-section__intro">
+        <p class="section-label">Add Your Datapoint</p>
+        <h2 class="section-headline" id="form-headline">
+          Each submission adds leverage with your city.
+        </h2>
+        <p class="section-body">
+          On our own, we don't move city councils. Documented, we do: where, how often, and how many of us play. Add yours to the count.
+        </p>
+        <ul class="form-section__checklist" aria-label="What we do with your data">
+          <li>Never sold to third parties</li>
+          <li>Combined with others in your area to build the case for local courts</li>
+          <li>Personal information always stays anonymous</li>
+          <li>Delivered as an anonymized report for you to bring to city council <span class="tag-planned">Planned</span></li>
+        </ul>
+      </div>
+
+      <!-- Right: Form card -->
+      <div class="form-card" role="region" aria-label="Community data submission form">
+
+        <!--
+          FORM INTEGRATION NOTE:
+          • id="paddleclub-form" — hook for the JS fetch handler below
+          • data-action attribute — replace with your Activepieces webhook URL
+          • File is submitted as FormData (multipart/form-data)
+        -->
+                <form id="paddleclub-form" novalidate>
+
+          <!-- ================= STEP 1 — minimal, always visible ================= -->
+          <div id="form-step-1">
+
+            <!-- Email -->
+            <div class="form-group">
+              <label for="field-email">
+                Email <span class="required" aria-label="required">*</span>
+              </label>
+              <input
+                type="email"
+                id="field-email"
+                name="email"
+                autocomplete="email"
+                placeholder="jane@example.com"
+                required
+              />
+              <span class="form-hint" id="email-hint">Confirms you're real, and lets me keep you updated on what I'm doing. Unsubscribe anytime.</span>
+            </div>
+
+            <!-- ZIP + Usual frequency (side by side) -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="field-zip">
+                  ZIP Code <span class="required" aria-label="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="field-zip"
+                  name="zip_code"
+                  autocomplete="postal-code"
+                  placeholder="e.g. 90210"
+                  maxlength="10"
+                  pattern="[0-9]{5}(-[0-9]{4})?"
+                  required
+                />
+                <span class="form-hint">Shows your city council their voters want more courts.</span>
+              </div>
+              <div class="form-group">
+                <label for="field-frequency">
+                  Usual frequency of play <span class="required" aria-label="required">*</span>
+                </label>
+                <select id="field-frequency" name="frequency" required>
+                  <option value="" disabled selected>Select…</option>
+                  <option>Daily</option>
+                  <option>A few times a week</option>
+                  <option>Weekly</option>
+                  <option>A few times a month</option>
+                  <option>Monthly</option>
+                  <option>Only occasionally</option>
+                </select>
+                <span class="form-hint">Every level of play builds community demand.</span>
+              </div>
+            </div>
+
+            <!-- Turnstile human check -->
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAADgW22dveBCr5JBI" style="margin-top:1rem;"></div>
+
+            <!-- Submit -->
+            <div class="form-submit">
+              <button type="submit" class="btn btn--submit" id="submit-btn">
+                <span id="submit-text">Add My Datapoint</span>
+                <span class="spinner" id="submit-spinner" aria-hidden="true"></span>
+              </button>
+              <p class="form-privacy-note">
+                🔒 Always anonymous, never sold. Used only to make the case for courts where you live.
+              </p>
+            </div>
+          </div>
+
+          <!-- ================= STEP 2 — optional, revealed after submit ================= -->
+          <div id="form-step-2" style="display:none;">
+            <div class="form-feedback form-feedback--success" style="display:block;">
+              ✓ You're in. Your datapoint is saved. Check your inbox to verify it.
+            </div>
+            <p class="form-hint" style="margin:0.75rem 0 0.25rem; font-weight:600;">
+              Optional: make your datapoint count for more.
+            </p>
+            <div class="form-group">
+              <label for="field-name">Name</label>
+              <input type="text" id="field-name" name="name" autocomplete="name" placeholder="Jane Smith" />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="field-spend">Monthly pickleball spend</label>
+                <select id="field-spend" name="spend_range">
+                  <option value="" disabled selected>Select…</option>
+                  <option>Under $25</option>
+                  <option>$25–75</option>
+                  <option>$75–150</option>
+                  <option>$150+</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="field-paddle">New paddle purchases</label>
+                <select id="field-paddle" name="paddle_frequency">
+                  <option value="" disabled selected>Select…</option>
+                  <option>Every few months</option>
+                  <option>About twice a year</option>
+                  <option>About once a year</option>
+                  <option>Every couple of years</option>
+                  <option>Haven't bought one yet</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-submit">
+              <button type="button" class="btn btn--submit" id="enrich-btn">
+                <span id="enrich-text">Add these details</span>
+                <span class="spinner" id="enrich-spinner" aria-hidden="true"></span>
+              </button>
+              <button type="button" class="btn--share" id="skip-btn" style="margin-top:0.6rem;">Skip</button>
+            </div>
+          </div>
+
+          <!-- ================= STEP 3 — final thank you + share ================= -->
+          <div id="form-done" style="display:none;">
+            <div class="form-feedback form-feedback--success" style="display:block;">
+              ✓ Thank you! Your datapoint is recorded. Don't forget to confirm it via the email we just sent.
+              <div class="form-share">
+                <p class="form-share__prompt">Know another player? Send them here.</p>
+                <div class="form-share__actions">
+                  <button class="btn--share" id="share-native" style="display:none">Share →</button>
+                  <button class="btn--share" id="share-copy">Copy Link</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error -->
+          <div class="form-feedback form-feedback--error" id="form-error" role="alert" aria-live="polite" style="display:none;">
+            Submission failed. Please check your connection and try again.
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </section>
 
 
   <!-- ============================================================
@@ -2265,177 +2457,6 @@
   </section>
 
 
-  <!-- ============================================================
-       SECTION 3 — SUBMISSION FORM
-       ============================================================ -->
-  <section class="section" id="submit" aria-labelledby="form-headline">
-    <div class="container form-section__grid">
-
-      <!-- Left: Explainer -->
-      <div class="form-section__intro">
-        <p class="section-label">Add Your Datapoint</p>
-        <h2 class="section-headline" id="form-headline">
-          Each submission adds leverage with your city.
-        </h2>
-        <p class="section-body">
-          On our own, we don't move city councils. Documented, we do: where, how often, and how many of us play. Add yours to the count.
-        </p>
-        <ul class="form-section__checklist" aria-label="What we do with your data">
-          <li>Never sold to third parties</li>
-          <li>Combined with others in your area to build the case for local courts</li>
-          <li>Personal information always stays anonymous</li>
-          <li>Delivered as an anonymized report for you to bring to city council <span class="tag-planned">Planned</span></li>
-        </ul>
-      </div>
-
-      <!-- Right: Form card -->
-      <div class="form-card" role="region" aria-label="Community data submission form">
-
-        <!--
-          FORM INTEGRATION NOTE:
-          • id="paddleclub-form" — hook for the JS fetch handler below
-          • data-action attribute — replace with your Activepieces webhook URL
-          • File is submitted as FormData (multipart/form-data)
-        -->
-                <form id="paddleclub-form" novalidate>
-
-          <!-- ================= STEP 1 — minimal, always visible ================= -->
-          <div id="form-step-1">
-
-            <!-- Email -->
-            <div class="form-group">
-              <label for="field-email">
-                Email <span class="required" aria-label="required">*</span>
-              </label>
-              <input
-                type="email"
-                id="field-email"
-                name="email"
-                autocomplete="email"
-                placeholder="jane@example.com"
-                required
-              />
-              <span class="form-hint" id="email-hint">Confirms you're real, and lets me keep you updated on what I'm doing. Unsubscribe anytime.</span>
-            </div>
-
-            <!-- ZIP + Usual frequency (side by side) -->
-            <div class="form-row">
-              <div class="form-group">
-                <label for="field-zip">
-                  ZIP Code <span class="required" aria-label="required">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="field-zip"
-                  name="zip_code"
-                  autocomplete="postal-code"
-                  placeholder="e.g. 90210"
-                  maxlength="10"
-                  pattern="[0-9]{5}(-[0-9]{4})?"
-                  required
-                />
-                <span class="form-hint">Shows your city council their voters want more courts.</span>
-              </div>
-              <div class="form-group">
-                <label for="field-frequency">
-                  Usual frequency of play <span class="required" aria-label="required">*</span>
-                </label>
-                <select id="field-frequency" name="frequency" required>
-                  <option value="" disabled selected>Select…</option>
-                  <option>Daily</option>
-                  <option>A few times a week</option>
-                  <option>Weekly</option>
-                  <option>A few times a month</option>
-                  <option>Monthly</option>
-                  <option>Only occasionally</option>
-                </select>
-                <span class="form-hint">Every level of play builds community demand.</span>
-              </div>
-            </div>
-
-            <!-- Turnstile human check -->
-            <div class="cf-turnstile" data-sitekey="0x4AAAAAADgW22dveBCr5JBI" style="margin-top:1rem;"></div>
-
-            <!-- Submit -->
-            <div class="form-submit">
-              <button type="submit" class="btn btn--submit" id="submit-btn">
-                <span id="submit-text">Add My Datapoint</span>
-                <span class="spinner" id="submit-spinner" aria-hidden="true"></span>
-              </button>
-              <p class="form-privacy-note">
-                🔒 Always anonymous, never sold. Used only to make the case for courts where you live.
-              </p>
-            </div>
-          </div>
-
-          <!-- ================= STEP 2 — optional, revealed after submit ================= -->
-          <div id="form-step-2" style="display:none;">
-            <div class="form-feedback form-feedback--success" style="display:block;">
-              ✓ You're in. Your datapoint is saved. Check your inbox to verify it.
-            </div>
-            <p class="form-hint" style="margin:0.75rem 0 0.25rem; font-weight:600;">
-              Optional: make your datapoint count for more.
-            </p>
-            <div class="form-group">
-              <label for="field-name">Name</label>
-              <input type="text" id="field-name" name="name" autocomplete="name" placeholder="Jane Smith" />
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="field-spend">Monthly pickleball spend</label>
-                <select id="field-spend" name="spend_range">
-                  <option value="" disabled selected>Select…</option>
-                  <option>Under $25</option>
-                  <option>$25–75</option>
-                  <option>$75–150</option>
-                  <option>$150+</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="field-paddle">New paddle purchases</label>
-                <select id="field-paddle" name="paddle_frequency">
-                  <option value="" disabled selected>Select…</option>
-                  <option>Every few months</option>
-                  <option>About twice a year</option>
-                  <option>About once a year</option>
-                  <option>Every couple of years</option>
-                  <option>Haven't bought one yet</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-submit">
-              <button type="button" class="btn btn--submit" id="enrich-btn">
-                <span id="enrich-text">Add these details</span>
-                <span class="spinner" id="enrich-spinner" aria-hidden="true"></span>
-              </button>
-              <button type="button" class="btn--share" id="skip-btn" style="margin-top:0.6rem;">Skip</button>
-            </div>
-          </div>
-
-          <!-- ================= STEP 3 — final thank you + share ================= -->
-          <div id="form-done" style="display:none;">
-            <div class="form-feedback form-feedback--success" style="display:block;">
-              ✓ Thank you! Your datapoint is recorded. Don't forget to confirm it via the email we just sent.
-              <div class="form-share">
-                <p class="form-share__prompt">Know another player? Send them here.</p>
-                <div class="form-share__actions">
-                  <button class="btn--share" id="share-native" style="display:none">Share →</button>
-                  <button class="btn--share" id="share-copy">Copy Link</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Error -->
-          <div class="form-feedback form-feedback--error" id="form-error" role="alert" aria-live="polite" style="display:none;">
-            Submission failed. Please check your connection and try again.
-          </div>
-
-        </form>
-      </div>
-
-    </div>
-  </section>
 
 
   <!-- ============================================================
@@ -2888,9 +2909,9 @@
                          row (city names + bars always stay visible)
       ---------------------------------------------------------- */
       const DASHBOARD_SECTIONS = {
-        datapoints: true,
-        zipCodes:   true,
-        cityCounts: true,
+        datapoints: false,
+        zipCodes:   false,
+        cityCounts: false,
       };
 
       const datapointsEl = document.getElementById('stat-datapoints');
